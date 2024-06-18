@@ -41,7 +41,6 @@
   <h4>Modos y Padding soportados por AES (Advanced Encryption Standard)</h4>
   <details>
     <summary>Expandir esta sección</summary>
-    
     <table>
       <tr>
         <th>Modo</th>
@@ -90,7 +89,6 @@
         <td>NoPadding</td>
       </tr>
     </table>
-    
     <p>Notas:</p>
     <ul>
       <li>ECB: Menos seguro debido a la igualdad de cifrados para bloques idénticos de texto plano.</li>
@@ -109,7 +107,6 @@
   <h4>Modos y Padding soportados por Camellia</h4>
   <details>
     <summary>Expandir esta sección</summary>
-    
     <table>
       <tr>
         <th>Modo</th>

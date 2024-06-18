@@ -5,9 +5,8 @@
 package es.uclm.esi.gsya.securityalgorithms;
 
 import es.uclm.esi.gsya.ciphers.Aes;
+import es.uclm.esi.gsya.ciphers.Camellia;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  *
@@ -34,6 +33,8 @@ public class SecurityAlgorithms {
             case "AES":
                 runAes(algData[1], algData[2], Integer.parseInt(algData[3]));
                 break;
+            case "Camellia":
+                runCamellia(algData[1], algData[2], Integer.parseInt(algData[3]));
             default:
                 System.out.println("Algorithm Not Found");
         }
@@ -50,6 +51,24 @@ public class SecurityAlgorithms {
 
             /* Encrypt */
             aes.encryptFile(inputFile, encryptedFile);
+
+            System.out.println("File Encrypted Successfully.");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    private static void runCamellia(String mode, String padding, int keySize){
+        try {
+            /* Check files */
+            File inputFile = new File(inputPath);
+            File encryptedFile = new File(outputPath);
+            
+            /* Init instance*/
+            Camellia camellia = new Camellia(mode, padding, keySize);
+
+            /* Encrypt */
+            camellia.encryptFile(inputFile, encryptedFile);
 
             System.out.println("File Encrypted Successfully.");
         } catch (Exception e) {

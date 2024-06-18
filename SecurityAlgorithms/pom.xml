@@ -5,6 +5,16 @@
     <artifactId>SecurityAlgorithms</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
+    
+    <dependencies>
+        <!-- Dependencia de BouncyCastle para soporte de criptografía -->
+        <dependency>
+            <groupId>org.bouncycastle</groupId>
+            <artifactId>bcprov-jdk18on</artifactId>
+            <version>1.76</version> <!-- Usa la versión más reciente disponible -->
+        </dependency>
+    </dependencies>
+    
     <build>
         <plugins>
             <plugin>
@@ -21,10 +31,12 @@
             </plugin>
         </plugins>
     </build>
+    
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>20</maven.compiler.source>
         <maven.compiler.target>20</maven.compiler.target>
         <exec.mainClass>es.uclm.esi.gsya.securityalgorithms.SecurityAlgorithms</exec.mainClass>
     </properties>
+    
 </project>

@@ -5,6 +5,7 @@
 </div>
 <div>
   <h2>Tutorial Docker</h2>
+  <p>Trabajamos con Ubuntu en este caso</p>
   <h3>Permisos</h3>
   <p>Damos permisos al usuario actual para utilizar Docker</p>
   <pre><code>sudo usermod -aG docker $USER</code></pre>

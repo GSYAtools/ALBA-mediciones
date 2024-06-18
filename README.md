@@ -113,7 +113,7 @@
         <th>Padding</th>
       </tr>
       <tr>
-        <td rowspan="4">ECB</td>
+        <td rowspan="3">ECB</td>
         <td>NoPadding</td>
       </tr>
       <tr>
@@ -123,10 +123,7 @@
         <td>ISO10126Padding</td>
       </tr>
       <tr>
-        <td>NoPadding</td>
-      </tr>
-      <tr>
-        <td rowspan="4">CBC</td>
+        <td rowspan="3">CBC</td>
         <td>NoPadding</td>
       </tr>
       <tr>
@@ -134,9 +131,6 @@
       </tr>
       <tr>
         <td>ISO10126Padding</td>
-      </tr>
-      <tr>
-        <td>NoPadding</td>
       </tr>
       <tr>
         <td>CFB</td>

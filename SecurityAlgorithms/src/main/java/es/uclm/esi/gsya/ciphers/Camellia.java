@@ -4,6 +4,7 @@
  */
 package es.uclm.esi.gsya.ciphers;
 
+import java.io.File;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 import javax.crypto.Cipher;
@@ -87,19 +88,19 @@ public class Camellia {
     }
 
     // Método para cifrar un archivo
-    public void encryptFile(String inputFilePath, String outputFilePath) throws Exception {
+    public void encryptFile(File inputFilePath, File outputFilePath) throws Exception {
         cipher.init(Cipher.ENCRYPT_MODE, secretKey);
         processFile(inputFilePath, outputFilePath);
     }
 
     // Método para descifrar un archivo
-    public void decryptFile(String inputFilePath, String outputFilePath) throws Exception {
+    public void decryptFile(File inputFilePath, File outputFilePath) throws Exception {
         cipher.init(Cipher.DECRYPT_MODE, secretKey);
         processFile(inputFilePath, outputFilePath);
     }
 
     // Método privado para procesar el archivo
-    private void processFile(String inputFilePath, String outputFilePath) throws Exception {
+    private void processFile(File inputFilePath, File outputFilePath) throws Exception {
         try (FileInputStream fis = new FileInputStream(inputFilePath);
              FileOutputStream fos = new FileOutputStream(outputFilePath)) {
 

@@ -7,11 +7,10 @@
     <packaging>jar</packaging>
     
     <dependencies>
-        <!-- Dependencia de BouncyCastle para soporte de criptografía -->
         <dependency>
             <groupId>org.bouncycastle</groupId>
             <artifactId>bcprov-jdk18on</artifactId>
-            <version>1.76</version> <!-- Usa la versión más reciente disponible -->
+            <version>1.78.1</version>
         </dependency>
     </dependencies>
     

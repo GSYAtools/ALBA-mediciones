@@ -31,4 +31,143 @@
   <pre><code>
     docker run -it --name [container_name] [image_name] java -jar [jar_file_name] [input_file] [output_file] [algoritmo]
   </code></pre>
+  <hr>
+</div>
+<div>
+  <h2>Algoritmos Implementados</h2>
+</div>
+<div>
+  <h3>Cifrado AES</h3>
+  <h4>Modos y Padding soportados por AES (Advanced Encryption Standard)</h4>
+  <details>
+    <summary>Expandir esta sección</summary>
+    
+    <table>
+      <tr>
+        <th>Modo</th>
+        <th>Padding</th>
+      </tr>
+      <tr>
+        <td rowspan="4">ECB</td>
+        <td>NoPadding</td>
+      </tr>
+      <tr>
+        <td>PKCS5Padding</td>
+      </tr>
+      <tr>
+        <td>PKCS7Padding</td>
+      </tr>
+      <tr>
+        <td>ISO10126Padding</td>
+      </tr>
+      <tr>
+        <td rowspan="4">CBC</td>
+        <td>NoPadding</td>
+      </tr>
+      <tr>
+        <td>PKCS5Padding</td>
+      </tr>
+      <tr>
+        <td>PKCS7Padding</td>
+      </tr>
+      <tr>
+        <td>ISO10126Padding</td>
+      </tr>
+      <tr>
+        <td>CFB</td>
+        <td>NoPadding</td>
+      </tr>
+      <tr>
+        <td>OFB</td>
+        <td>NoPadding</td>
+      </tr>
+      <tr>
+        <td>CTR</td>
+        <td>NoPadding</td>
+      </tr>
+      <tr>
+        <td>GCM (Galois/Counter Mode)</td>
+        <td>NoPadding</td>
+      </tr>
+    </table>
+    
+    <p>Notas:</p>
+    <ul>
+      <li>ECB: Menos seguro debido a la igualdad de cifrados para bloques idénticos de texto plano.</li>
+      <li>CBC: Adecuado para la mayoría de las aplicaciones que requieren seguridad mejorada respecto a ECB.</li>
+      <li>CFB, OFB, CTR: Modos que permiten operar sobre flujos de datos y no requieren padding.</li>
+      <li>GCM: Proporciona cifrado autenticado con eficiencia y es ampliamente utilizado en protocolos de red.</li>
+    </ul>
+    <p>Ejecución AES</p>
+    <pre><code>
+      java -jar SecurityAlgorithms.jar [input_file] [output_file] AES-[modo]-[padding]-[key_size]
+    </code></pre>
+  </details>
+</div>
+<div>
+  <h3>Cifrado Camellia</h3>
+  <h4>Modos y Padding soportados por Camellia</h4>
+  <details>
+    <summary>Expandir esta sección</summary>
+    
+    <table>
+      <tr>
+        <th>Modo</th>
+        <th>Padding</th>
+      </tr>
+      <tr>
+        <td rowspan="4">ECB</td>
+        <td>NoPadding</td>
+      </tr>
+      <tr>
+        <td>PKCS5Padding</td>
+      </tr>
+      <tr>
+        <td>ISO10126Padding</td>
+      </tr>
+      <tr>
+        <td>NoPadding</td>
+      </tr>
+      <tr>
+        <td rowspan="4">CBC</td>
+        <td>NoPadding</td>
+      </tr>
+      <tr>
+        <td>PKCS5Padding</td>
+      </tr>
+      <tr>
+        <td>ISO10126Padding</td>
+      </tr>
+      <tr>
+        <td>NoPadding</td>
+      </tr>
+      <tr>
+        <td>CFB</td>
+        <td>NoPadding</td>
+      </tr>
+      <tr>
+        <td>OFB</td>
+        <td>NoPadding</td>
+      </tr>
+      <tr>
+        <td>CTR</td>
+        <td>NoPadding</td>
+      </tr>
+      <tr>
+        <td>GCM (Galois/Counter Mode)</td>
+        <td>NoPadding</td>
+      </tr>
+    </table>
+    <p>Notas:</p>
+      <ul>
+        <li>ECB: Menos seguro debido a la igualdad de cifrados para bloques idénticos de texto plano.</li>
+        <li>CBC: Adecuado para la mayoría de las aplicaciones que requieren seguridad mejorada respecto a ECB.</li>
+        <li>CFB, OFB, CTR: Modos que permiten operar sobre flujos de datos y no requieren padding.</li>
+        <li>GCM: Proporciona cifrado autenticado con eficiencia y es ampliamente utilizado en protocolos de red.</li>
+      </ul>
+      <p>Ejecución Camellia</p>
+      <pre><code>
+        java -jar SecurityAlgorithms.jar [input_file] [output_file] Camellia-[modo]-[padding]-[key_size]
+      </code></pre>
+  </details>
 </div>

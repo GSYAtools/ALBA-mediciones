@@ -14,27 +14,38 @@ import javax.crypto.spec.SecretKeySpec;
 /**
  *
  * @author Eugenio
- * 
+ */
+
+/*
+ * Modos y Padding soportados por AES (Advanced Encryption Standard):
+ *
  * Modes:
  * ECB
+ *  - NoPadding
  *  - PKCS5Padding
  *  - PKCS7Padding
  *  - ISO10126Padding
- *  - NoPadding
  * CBC
+ *  - NoPadding
  *  - PKCS5Padding
  *  - PKCS7Padding
  *  - ISO10126Padding
- *  - NoPadding
  * CFB
  *  - NoPadding
  * OFB
  *  - NoPadding
  * CTR
  *  - NoPadding
- * GCM
+ * GCM (Galois/Counter Mode)
  *  - NoPadding
+ *
+ * Notas:
+ * - ECB: Menos seguro debido a la igualdad de cifrados para bloques idénticos de texto plano.
+ * - CBC: Adecuado para la mayoría de las aplicaciones que requieren seguridad mejorada respecto a ECB.
+ * - CFB, OFB, CTR: Modos que permiten operar sobre flujos de datos y no requieren padding.
+ * - GCM: Proporciona cifrado autenticado con eficiencia y es ampliamente utilizado en protocolos de red.
  */
+
 public class Aes {
     private byte[] key;
     private String instanceString = "AES/";

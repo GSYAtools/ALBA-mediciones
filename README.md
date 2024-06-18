@@ -96,6 +96,7 @@
       <li>CFB, OFB, CTR: Modos que permiten operar sobre flujos de datos y no requieren padding.</li>
       <li>GCM: Proporciona cifrado autenticado con eficiencia y es ampliamente utilizado en protocolos de red.</li>
     </ul>
+    <p>En GCM se utilizará un vector de inicializacion (IV) de 12 bytes (96 bits), en el resto de modos (excepto ECB que no utiliza IV), se utilizara un IV de 16 bytes (128 bits)</p>
     <p>Ejecución AES</p>
     <pre><code>
       java -jar SecurityAlgorithms.jar [input_file] [output_file] AES-[modo]-[padding]-[key_size]

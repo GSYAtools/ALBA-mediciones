@@ -1,16 +1,8 @@
 # Makefile para el proyecto SecurityAlgorithms
-
-# Nombre de la imagen Docker
-IMAGE_NAME=security
-
-# Ruta al JAR generado
-JAR_PATH=SecurityAlgorithms/target/SecurityAlgorithms-1.0-jar-with-dependencies.jar
-
-# Directorio de destino para Docker
-DOCKER_DIR=docker
-
-# Nombre del contenedor
-CONTAINER_NAME=security-test
+IMAGE_NAME=security # Nombre de la imagen Docker
+JAR_PATH=SecurityAlgorithms/target/SecurityAlgorithms-1.0-jar-with-dependencies.jar # Ruta al JAR generado
+DOCKER_DIR=docker # Directorio de destino para Docker
+CONTAINER_NAME=security-test # Nombre del contenedor
 
 # Objetivo por defecto (ayuda)
 .DEFAULT_GOAL := help
@@ -23,7 +15,7 @@ help:
 	@echo "  make prepare       - Crea el directorio docker y genera el Dockerfile"
 	@echo "  make copy-jar      - Copia el JAR en el directorio docker"
 	@echo "  make build-image   - Construye la imagen Docker llamada '$(IMAGE_NAME)'"
-	@echo "  make run           - Ejecuta el contenedor Docker desde la imagen '$(IMAGE_NAME)'"
+	@echo "  make run INPUT=<fichero_a_encriptar> OUTPUT=<fichero_de_salida> ALG=<algoritmo>          - Ejecuta el contenedor Docker desde la imagen '$(IMAGE_NAME)'"
 	@echo "  make remove-image  - Elimina la imagen Docker '$(IMAGE_NAME)'"
 	@echo "  make clean         - Limpia el directorio docker y elimina el contenedor '$(CONTAINER_NAME)'"
 
@@ -44,12 +36,18 @@ copy-jar: $(DOCKER_DIR)
 	cp $(JAR_PATH) $(DOCKER_DIR)
 
 # Regla para construir la imagen Docker
-build-image: prepare copy-jar
+build: prepare copy-jar
+	docker build -t $(IMAGE_NAME) $(DOCKER_DIR)
+
+# Regla para reconstruir la imagen Docker
+build: prepare copy-jar
+	docker rm -f $(CONTAINER_NAME)
+	docker rmi -f $(IMAGE_NAME)
 	docker build -t $(IMAGE_NAME) $(DOCKER_DIR)
 
 # Regla para ejecutar el contenedor Docker
 run:
-	docker run -ti --name $(CONTAINER_NAME) $(IMAGE_NAME) java -jar $(notdir $(JAR_PATH))
+	docker run -ti --name $(CONTAINER_NAME) $(IMAGE_NAME) java -jar $(notdir $(JAR_PATH)) $(INPUT) $(OUTPUT) $(ALG)
 
 # Regla para eliminar la imagen Docker
 remove-image:

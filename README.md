@@ -1,4 +1,10 @@
 <div>
+  <p>Puedes clonar este repositorio:</p>
+  <pre><code></code>
+    git clone https://github.com/GSYAtools/ALBA-mediciones
+  </code></pre>
+</div>
+<div>
   <h1>ALBA mediciones</h1>
   <p>Algoritmos de Seguridad para medición de consumos</p>
   <hr>

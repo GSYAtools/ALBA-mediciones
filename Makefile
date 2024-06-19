@@ -1,8 +1,8 @@
 # Makefile para el proyecto SecurityAlgorithms
-IMAGE_NAME=security # Nombre de la imagen Docker
-JAR_PATH=SecurityAlgorithms/target/SecurityAlgorithms-1.0-jar-with-dependencies.jar # Ruta al JAR generado
-DOCKER_DIR=docker # Directorio de destino para Docker
-CONTAINER_NAME=security-test # Nombre del contenedor
+IMAGE_NAME=security
+JAR_PATH=SecurityAlgorithms/target/SecurityAlgorithms-1.0-jar-with-dependencies.jar
+DOCKER_DIR=docker
+CONTAINER_NAME=security-test
 
 # Objetivo por defecto (ayuda)
 .DEFAULT_GOAL := help

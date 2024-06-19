@@ -2,11 +2,15 @@
 <p>Puedes clonar este repositorio:</p>
 <pre><code></code>git clone https://github.com/GSYAtools/ALBA-mediciones</code></pre>
 </div>
+
+
 <div>
 <h1>ALBA mediciones</h1>
 <p>Algoritmos de Seguridad para medición de consumos</p>
 <hr>
 </div>
+
+
 <div>
 <h2>Tutorial Docker</h2>
 <p>Trabajamos con Ubuntu en este caso</p>
@@ -40,9 +44,17 @@ WORKDIR /usr/app</code></pre>
 <pre><code>docker run -it --name [container_name] [image_name] java -jar [jar_file_name] [input_file] [output_file] [algoritmo]</code></pre>
 <hr>
 </div>
+
+
+<div>
+<h2>Makefile</h2>
+</div>
+
 <div>
 <h2>Algoritmos Implementados</h2>
 </div>
+
+
 <div>
 <h3>Cifrado AES</h3>
 <h4>Modos y Padding soportados por AES (Advanced Encryption Standard)</h4>
@@ -108,6 +120,8 @@ WORKDIR /usr/app</code></pre>
 <pre><code>java -jar SecurityAlgorithms.jar [input_file] [output_file] AES-[modo]-[padding]-[key_size]</code></pre>
 </details>
 </div>
+
+
 <div>
 <h3>Cifrado Camellia</h3>
 <h4>Modos y Padding soportados por Camellia</h4>

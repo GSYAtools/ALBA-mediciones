@@ -2,10 +2,17 @@ package es.uclm.esi.gsya.ciphers;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.nio.file.Files;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
+import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.KeyGenerator;
+import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.GCMParameterSpec;
 import javax.crypto.spec.IvParameterSpec;
@@ -67,7 +74,7 @@ public class Aes {
             keyGen.init(keySize);
             SecretKey secretKey = keyGen.generateKey();
             return secretKey.getEncoded();
-        } catch (Exception e) {
+        } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException("Error al generar la clave AES", e);
         }
     }
@@ -103,7 +110,7 @@ public class Aes {
                 }
                 outputStream.write(outputBytes);
             }
-        } catch (Exception e) {
+        } catch (IOException | InvalidAlgorithmParameterException | InvalidKeyException | NoSuchAlgorithmException | BadPaddingException | IllegalBlockSizeException | NoSuchPaddingException e) {
             throw new Exception("Error al encriptar el archivo", e);
         }
     }
@@ -138,7 +145,7 @@ public class Aes {
             try (FileOutputStream outputStream = new FileOutputStream(outputFile)) {
                 outputStream.write(outputBytes);
             }
-        } catch (Exception e) {
+        } catch (IOException | InvalidAlgorithmParameterException | InvalidKeyException | NoSuchAlgorithmException | BadPaddingException | IllegalBlockSizeException | NoSuchPaddingException e) {
             throw new Exception("Error al desencriptar el archivo", e);
         }
     }

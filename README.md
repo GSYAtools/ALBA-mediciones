@@ -59,7 +59,7 @@ WORKDIR /usr/app</code></pre>
 <pre><code>make build</code></pre>
 <p>Para volver a construir la imagen en caso de ser necesitado</p>
 <pre><code>make rebuild</code></pre>
-<p>Para volver a construir la imagen en caso de ser necesitado</p>
+<p>Para ejecutar el programa, el container no se eliminará tras la ejecución</p>
 <pre><code>make run INPUT=[input_file] OUTPUT=[output_file] ALG=[orden_del_algoritmo]</code></pre>
 <p>Para limpiar el entorno de trabajo</p>
 <pre><code>make clean</code></pre>

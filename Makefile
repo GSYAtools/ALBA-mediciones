@@ -1,8 +1,8 @@
 # Makefile para el proyecto SecurityAlgorithms
-IMAGE_NAME=security # Nombre de la imagen Docker
-JAR_PATH=SecurityAlgorithms/target/SecurityAlgorithms-1.0-jar-with-dependencies.jar # Ruta al JAR generado
-DOCKER_DIR=docker # Directorio de destino para Docker
-CONTAINER_NAME=security-test # Nombre del contenedor
+IMAGE_NAME=security
+JAR_PATH=SecurityAlgorithms/target/SecurityAlgorithms-1.0-jar-with-dependencies.jar
+DOCKER_DIR=docker
+CONTAINER_NAME=security-test
 
 # Objetivo por defecto (ayuda)
 .DEFAULT_GOAL := help
@@ -14,8 +14,10 @@ help:
 	@echo "Comandos disponibles:"
 	@echo "  make prepare       - Crea el directorio docker y genera el Dockerfile"
 	@echo "  make copy-jar      - Copia el JAR en el directorio docker"
-	@echo "  make build-image   - Construye la imagen Docker llamada '$(IMAGE_NAME)'"
-	@echo "  make run INPUT=<fichero_a_encriptar> OUTPUT=<fichero_de_salida> ALG=<algoritmo>          - Ejecuta el contenedor Docker desde la imagen '$(IMAGE_NAME)'"
+	@echo "  make build         - Construye la imagen Docker llamada '$(IMAGE_NAME)'"
+	@echo "  make rebuild       - Construye la imagen Docker llamada '$(IMAGE_NAME)'"
+	@echo "  make run INPUT=<fichero_a_encriptar> OUTPUT=<fichero_de_salida> ALG=<algoritmo>"
+	@echo "                     - Ejecuta el contenedor Docker desde la imagen '$(IMAGE_NAME)'"
 	@echo "  make remove-image  - Elimina la imagen Docker '$(IMAGE_NAME)'"
 	@echo "  make clean         - Limpia el directorio docker y elimina el contenedor '$(CONTAINER_NAME)'"
 
@@ -40,7 +42,7 @@ build: prepare copy-jar
 	docker build -t $(IMAGE_NAME) $(DOCKER_DIR)
 
 # Regla para reconstruir la imagen Docker
-build: prepare copy-jar
+rebuild: prepare copy-jar
 	docker rm -f $(CONTAINER_NAME)
 	docker rmi -f $(IMAGE_NAME)
 	docker build -t $(IMAGE_NAME) $(DOCKER_DIR)

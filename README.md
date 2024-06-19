@@ -48,6 +48,18 @@ WORKDIR /usr/app</code></pre>
 
 <div>
 <h2>Makefile</h2>
+<p>Para realizar la creación de la carpeta de docker y el Dockerfile</p>
+<pre><code>make prepare</code></pre>
+<p>Para copiar el .jar del proyecto a la carpeta docker</p>
+<pre><code>make copy-jar</code></pre>
+<p>Para construir la imagen de docker, esto ejecutará la orden <code>copy-jar</code> para mantener siempre la versión más actualizada desde el codigo fuente</p>
+<pre><code>make build</code></pre>
+<p>Para volver a construir la imagen en caso de ser necesitado</p>
+<pre><code>make rebuild</code></pre>
+<p>Para volver a construir la imagen en caso de ser necesitado</p>
+<pre><code>make run INPUT=[input_file] OUTPUT=[output_file] ALG=[orden_del_algoritmo]</code></pre>
+<p>Para limpiar el entorno de trabajo</p>
+<pre><code>make clean</code></pre>
 </div>
 
 <div>

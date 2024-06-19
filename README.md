@@ -48,6 +48,9 @@ WORKDIR /usr/app</code></pre>
 
 <div>
 <h2>Makefile</h2>
+<p>Se ha creado un fichero Makefile para simplificar y automatizar los procesos docker</p>
+<details>
+<summary>Expandir esta sección</summary>
 <p>Para realizar la creación de la carpeta de docker y el Dockerfile</p>
 <pre><code>make prepare</code></pre>
 <p>Para copiar el .jar del proyecto a la carpeta docker</p>
@@ -60,7 +63,9 @@ WORKDIR /usr/app</code></pre>
 <pre><code>make run INPUT=[input_file] OUTPUT=[output_file] ALG=[orden_del_algoritmo]</code></pre>
 <p>Para limpiar el entorno de trabajo</p>
 <pre><code>make clean</code></pre>
+</details>
 </div>
+
 
 <div>
 <h2>Algoritmos Implementados</h2>

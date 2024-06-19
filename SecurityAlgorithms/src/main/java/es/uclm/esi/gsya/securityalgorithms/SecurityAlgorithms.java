@@ -30,13 +30,9 @@ public class SecurityAlgorithms {
         String[] algData = algorithmInfo.split("-");
         /* Launch algorithm */
         switch(algData[0]){
-            case "AES":
-                runAes(algData[1], algData[2], Integer.parseInt(algData[3]));
-                break;
-            case "Camellia":
-                runCamellia(algData[1], algData[2], Integer.parseInt(algData[3]));
-            default:
-                System.out.println("Algorithm Not Found");
+            case "AES" -> runAes(algData[1], algData[2], Integer.parseInt(algData[3]));
+            case "Camellia" -> runCamellia(algData[1], algData[2], Integer.parseInt(algData[3]));
+            default -> System.out.println("Algoritmo No Encontrado");
         }
     }
     

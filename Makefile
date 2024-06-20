@@ -43,7 +43,7 @@ copy-jar: $(DOCKER_DIR)
 	cp $(JAR_PATH) $(DOCKER_DIR)
 
 # Regla para construir la imagen Docker
-build: copy-jar
+build: prepare copy-jar
 	docker build -t $(IMAGE_NAME) $(DOCKER_DIR)
 
 # Regla para reconstruir la imagen Docker

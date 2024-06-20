@@ -60,9 +60,13 @@ public class SecurityAlgorithms {
     
     private static void runAes(String mode, String padding){
         try {
+            File inputFile = null;
+            File outputFile = null;
             /* Check files */
-            File inputFile = new File(inputPath);
-            File outputFile = new File(outputPath);
+            if (!mode.equals("g")) {
+                inputFile = new File(inputPath);
+                outputFile = new File(outputPath);
+            }
             
             switch(runMode){
                 case "e" -> {

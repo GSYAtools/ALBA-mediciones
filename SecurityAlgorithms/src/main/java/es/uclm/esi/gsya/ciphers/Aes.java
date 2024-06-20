@@ -61,6 +61,11 @@ public class Aes {
     private byte[] iv;
     
     public Aes(String mode, String padding, String keyPath){
+        try {
+            key = FileHandler.readKeyFromFile(keyPath);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
         instanceString += mode + "/" + padding;
         if (mode.equals("GCM")){
             iv = generateIv(12);

@@ -63,7 +63,7 @@ public class SecurityAlgorithms {
             File inputFile = null;
             File outputFile = null;
             /* Check files */
-            if (!mode.equals("g")) {
+            if (!runMode.equals("g")) {
                 inputFile = new File(inputPath);
                 outputFile = new File(outputPath);
             }

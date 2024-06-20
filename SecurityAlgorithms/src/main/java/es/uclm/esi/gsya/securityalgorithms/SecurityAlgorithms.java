@@ -44,8 +44,12 @@ public class SecurityAlgorithms {
         /* Processing algorithm */
             /* This should be an string like AES-CBC-PKCS7Padding */
         String[] algData = algorithm.split("-");
-        System.out.println(algData.length);
-        String algName = algData[0], algMode = algData[1], algPadding = algData[2];
+        String algName, algMode, algPadding;
+        if(algData.length == 1){
+            algName = algorithm; algMode = null; algPadding = null;
+        } else {
+            algName = algData[0]; algMode = algData[1]; algPadding = algData[2];
+        }
         /* Launch algorithm */
         switch(algName){
             case "AES" -> runAes(algMode, algPadding);

@@ -14,6 +14,8 @@
 <div>
 <h2>Tutorial Docker</h2>
 <p>Trabajamos con Ubuntu en este caso</p>
+<details>
+<summary>Expandir esta sección</summary>
 <h3>Permisos</h3>
 <p>Damos permisos al usuario actual para utilizar Docker</p>
 <pre><code>sudo usermod -aG docker $USER</code></pre>
@@ -24,8 +26,6 @@
 COPY . /usr/app
 WORKDIR /usr/app</code></pre>
 <h3>Contrucción de la imagen y el contenedor</h3>
-<details>
-<summary>Expandir esta sección</summary>
 <p>Para la creación de la imagen:</p>
 <pre><code>docker build -t [image_name] [app_path]</code></pre>
 <p>Para ver el listado de imagenes:</p>
@@ -38,10 +38,10 @@ WORKDIR /usr/app</code></pre>
 <pre><code>docker rm [container_id]</code></pre>
 <p>Para eliminar imagenes:</p>
 <pre><code>docker rmi [image_id]</code></pre>
-</details>
 <h3>Ejecutando nuestra aplicación</h3>
 <p>Ejecutamos nuestra app al tiempo de crear el container:</p>
 <pre><code>docker run -it --name [container_name] [image_name] java -jar [jar_file_name] [input_file] [output_file] [algoritmo]</code></pre>
+</details>
 <hr>
 </div>
 

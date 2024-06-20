@@ -1,5 +1,7 @@
 package es.uclm.esi.gsya.ciphers;
 
+import es.uclm.esi.gsya.utils.FileHandler;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -58,13 +60,21 @@ public class Aes {
     private String instanceString = "AES/";
     private byte[] iv;
     
-    public Aes(String mode, String padding, int keySize){
-        key = generateKey(keySize);
+    public Aes(String mode, String padding, String keyPath){
         instanceString += mode + "/" + padding;
         if (mode.equals("GCM")){
             iv = generateIv(12);
         } else if (!mode.equals("ECB")) {
             iv = generateIv(16);
+        }
+    }
+    
+    public Aes(int keySize){
+        key = generateKey(keySize);
+        try {
+            FileHandler.saveKeyToFile(FileHandler.KEY_PATH, key);
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
     }
     

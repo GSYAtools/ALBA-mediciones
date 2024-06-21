@@ -1,4 +1,1 @@
-es\uclm\esi\gsya\securityalgorithms\SecurityAlgorithms.class
-es\uclm\esi\gsya\utils\FileHandler.class
-es\uclm\esi\gsya\ciphers\Camellia.class
-es\uclm\esi\gsya\ciphers\Aes.class
+es/uclm/esi/gsya/utils/Measure.class

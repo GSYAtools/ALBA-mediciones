@@ -6,7 +6,9 @@ package es.uclm.esi.gsya.securityalgorithms;
 
 import es.uclm.esi.gsya.ciphers.Aes;
 import es.uclm.esi.gsya.ciphers.Camellia;
+import es.uclm.esi.gsya.utils.Measure;
 import java.io.File;
+import java.io.IOException;
 
 /**
  *
@@ -58,6 +60,17 @@ public class SecurityAlgorithms {
         }
     }
     
+    
+    private static void showMeasures() throws IOException{
+        long fi = Measure.getFileSize(inputPath);
+        long fo = Measure.getFileSize(outputPath);
+        long cp = Measure.calculateCompression(fi, fo);
+        System.out.printf("Input File size: %d bytes\n", fi);
+        System.out.printf("Output File Size: %d bytes\n", fo);
+        System.out.printf("Compression Percentage: %d %%\n", cp);
+        System.out.printf("Execution Time: %d ns\n", Measure.getLastTimeMeasure());
+    }
+    
     private static void runAes(String mode, String padding){
         try {
             File inputFile = null;
@@ -72,8 +85,11 @@ public class SecurityAlgorithms {
                 case "e" -> {
                     Aes aes = new Aes(mode, padding, keyPath);
                     for(int t=0; t<times; t++){
+                        Measure.getStartTime();
                         aes.encryptFile(inputFile, outputFile);
+                        Measure.getEndTime();
                         System.out.printf("File Encrypted Successfully. [%d]\n", t+1);
+                        showMeasures();
                     }
                 }
                 case "d" -> {

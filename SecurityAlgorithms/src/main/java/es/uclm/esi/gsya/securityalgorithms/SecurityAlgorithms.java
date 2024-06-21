@@ -53,7 +53,7 @@ public class SecurityAlgorithms {
         /* Launch algorithm */
         switch(algName){
             case "AES" -> runAes(algMode, algPadding);
-            case "Camellia" -> runCamellia(algMode, algPadding, Integer.parseInt(algData[3]));
+            case "Camellia" -> runCamellia(algMode, algPadding);
             default -> System.out.println("Algoritmo No Encontrado");
         }
     }
@@ -71,13 +71,17 @@ public class SecurityAlgorithms {
             switch(runMode){
                 case "e" -> {
                     Aes aes = new Aes(mode, padding, keyPath);
-                    aes.encryptFile(inputFile, outputFile);
-                    System.out.println("File Encrypted Successfully.");
+                    for(int t=0; t<times; t++){
+                        aes.encryptFile(inputFile, outputFile);
+                        System.out.printf("File Encrypted Successfully. [%d]\n", t);
+                    }
                 }
                 case "d" -> {
                     Aes aes = new Aes(mode, padding, keyPath);
-                    aes.decryptFile(inputFile, outputFile);
-                    System.out.println("File Decrypted Successfully.");
+                    for(int t=0; t<times;t++){
+                        aes.decryptFile(inputFile, outputFile);
+                        System.out.printf("File Decrypted Successfully.[%d]\n", t);
+                    }
                 }
                 case "g" -> {
                     Aes aes = new Aes(keySize);
@@ -90,19 +94,37 @@ public class SecurityAlgorithms {
         }
     }
     
-    private static void runCamellia(String mode, String padding, int keySize){
+    private static void runCamellia(String mode, String padding){
         try {
+            File inputFile = null;
+            File outputFile = null;
             /* Check files */
-            File inputFile = new File(inputPath);
-            File encryptedFile = new File(outputPath);
+            if (!runMode.equals("g")) {
+                inputFile = new File(inputPath);
+                outputFile = new File(outputPath);
+            }
             
-            /* Init instance*/
-            Camellia camellia = new Camellia(mode, padding, keySize);
-
-            /* Encrypt */
-            camellia.encryptFile(inputFile, encryptedFile);
-
-            System.out.println("File Encrypted Successfully.");
+            switch(runMode){
+                case "e" -> {
+                    Camellia camellia = new Camellia(mode, padding, keyPath);
+                    for(int t=0; t<times; t++){
+                        camellia.encryptFile(inputFile, outputFile);
+                        System.out.printf("File Encrypted Successfully. [%d]\n", t);
+                    }
+                }
+                case "d" -> {
+                    Camellia camellia = new Camellia(mode, padding, keyPath);
+                    for(int t=0; t<times; t++){
+                        camellia.decryptFile(inputFile, outputFile);
+                        System.out.printf("File Encrypted Successfully. [%d]\n", t);
+                    }
+                }
+                case "g" -> {
+                    Camellia camellia = new Camellia(keySize);
+                    System.out.println("Key File Generated Successfully.");
+                }
+            }
+            
         } catch (Exception e) {
             e.printStackTrace();
         }

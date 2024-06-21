@@ -12,9 +12,7 @@ import java.io.IOException;
  *
  * @author Eugenio
  */
-public class FileHandler {
-    public static final String KEY_PATH = "clave.key";
-    
+public class FileHandler {   
     public static void saveKeyToFile(String filePath, byte[] keyBytes) throws IOException {
         try (FileOutputStream fos = new FileOutputStream(filePath)) {
             fos.write(keyBytes);

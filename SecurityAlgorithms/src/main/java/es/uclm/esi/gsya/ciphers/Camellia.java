@@ -4,17 +4,27 @@
  */
 package es.uclm.esi.gsya.ciphers;
 
+import es.uclm.esi.gsya.utils.FileHandler;
 import java.io.File;
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
-
-import javax.crypto.Cipher;
-import javax.crypto.KeyGenerator;
-import javax.crypto.SecretKey;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
+import java.security.SecureRandom;
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.KeyGenerator;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.SecretKey;
+import javax.crypto.spec.GCMParameterSpec;
+import javax.crypto.spec.IvParameterSpec;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import java.security.Security;
-import java.util.Arrays;
+import javax.crypto.spec.SecretKeySpec;
 
 /**
  *
@@ -58,70 +68,123 @@ import java.util.Arrays;
  * - XTS: Especializado para cifrado de datos de almacenamiento como discos.
  */
 
+
 public class Camellia {
-    private final String transformation; // Modo y Padding (e.g., "Camellia/ECB/PKCS5Padding")
-    private final int keySize; // Tamaño de la clave en bits
-    private SecretKey secretKey; // Clave secreta generada
-    private final Cipher cipher; // Cifrador
-
-    private static final int BUFFER_SIZE = 1024; // Tamaño del buffer para lectura/escritura de bloques
-
-    public Camellia(String mode, String padding, int keySize) throws Exception {
-        this.transformation = "Camellia/" + mode + "/" + padding;
-        this.keySize = keySize;
-
-        // Verificar que el tamaño de la clave es válido
-        if (keySize != 128 && keySize != 192 && keySize != 256) {
-            throw new IllegalArgumentException("El tamaño de la clave debe ser 128, 192 o 256 bits.");
+    private byte[] key;
+    private String instanceString = "Camellia/";
+    private byte[] iv;
+    
+    public Camellia(String mode, String padding, String keyPath) throws Exception {
+        try {
+            key = FileHandler.readKeyFromFile(keyPath);
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
+        instanceString += mode + "/" + padding;
 
         // Añadir BouncyCastle como proveedor de seguridad
         Security.addProvider(new BouncyCastleProvider());
 
-        // Generar la clave
-        KeyGenerator keyGen = KeyGenerator.getInstance("Camellia", "BC");
-        keyGen.init(keySize);
-        this.secretKey = keyGen.generateKey();
-
-        // Inicializar el cifrador
-        this.cipher = Cipher.getInstance(this.transformation, "BC");
+        if (mode.equals("GCM")){
+            iv = generateIv(12);
+        } else if (!mode.equals("ECB")) {
+            iv = generateIv(16);
+        }
     }
 
-    // Método para cifrar un archivo
-    public void encryptFile(File inputFilePath, File outputFilePath) throws Exception {
-        cipher.init(Cipher.ENCRYPT_MODE, secretKey);
-        processFile(inputFilePath, outputFilePath);
+    public Camellia(int keySize) throws NoSuchProviderException {
+        key = generateKey(keySize);
+        try {
+            FileHandler.saveKeyToFile("Camellia_" + keySize + ".key", key);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
     }
-
-    // Método para descifrar un archivo
-    public void decryptFile(File inputFilePath, File outputFilePath) throws Exception {
-        cipher.init(Cipher.DECRYPT_MODE, secretKey);
-        processFile(inputFilePath, outputFilePath);
+    
+    private static byte[] generateKey(int keySize) throws NoSuchProviderException {
+        // Verificar que el tamaño de la clave es válido
+        if (keySize != 128 && keySize != 192 && keySize != 256) {
+            throw new IllegalArgumentException("El tamaño de la clave debe ser 128, 192 o 256 bits.");
+        }
+        
+        try {
+            KeyGenerator keyGen = KeyGenerator.getInstance("Camellia", "BC");
+            keyGen.init(keySize);
+            SecretKey secretKey = keyGen.generateKey();
+            return secretKey.getEncoded();
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException("Error al generar la clave Camellia", e);
+        }
     }
-
-    // Método privado para procesar el archivo
-    private void processFile(File inputFilePath, File outputFilePath) throws Exception {
-        try (FileInputStream fis = new FileInputStream(inputFilePath);
-             FileOutputStream fos = new FileOutputStream(outputFilePath)) {
-
-            byte[] buffer = new byte[BUFFER_SIZE];
-            int bytesRead;
-
-            // Leer y cifrar/descifrar el archivo en bloques
-            while ((bytesRead = fis.read(buffer)) != -1) {
-                // Si leemos menos de BUFFER_SIZE bytes, debemos ajustar el tamaño del buffer
-                byte[] bytesToProcess;
-                if (bytesRead < BUFFER_SIZE) {
-                    bytesToProcess = Arrays.copyOf(buffer, bytesRead);
-                } else {
-                    bytesToProcess = buffer;
-                }
-
-                byte[] processedBytes = cipher.doFinal(bytesToProcess);
-                fos.write(processedBytes);
+    
+    private static byte[] generateIv(int size) {
+        byte[] iv = new byte[size]; // 12 bytes (96 bits) para GCM, 16 bytes (128 bits) para otros modos
+        SecureRandom secureRandom = new SecureRandom();
+        secureRandom.nextBytes(iv);
+        return iv;
+    }
+    
+    public void encryptFile(File inputFile, File outputFile) throws Exception {
+        try {
+            SecretKeySpec secretKeySpec = new SecretKeySpec(key, "Camellia");
+            Cipher cipher = Cipher.getInstance(instanceString, "BC");
+            if (instanceString.contains("GCM")) {
+                GCMParameterSpec gcmSpec = new GCMParameterSpec(128, iv); // 128 bits de tamaño del tag
+                cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec, gcmSpec);
+            } else if (!instanceString.contains("ECB")) {
+                IvParameterSpec ivSpec = new IvParameterSpec(iv);
+                cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec, ivSpec);
+            } else {
+                cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec);
             }
-        } catch (IOException e) {
-            throw new Exception("Error al procesar el archivo: " + e.getMessage(), e);
+
+            byte[] inputBytes = Files.readAllBytes(inputFile.toPath());
+            byte[] outputBytes = cipher.doFinal(inputBytes);
+
+            try (FileOutputStream outputStream = new FileOutputStream(outputFile)) {
+                // Escribir IV primero si no es ECB
+                if (!instanceString.contains("ECB")) {
+                    outputStream.write(iv);
+                }
+                outputStream.write(outputBytes);
+            }
+        } catch (IOException | InvalidAlgorithmParameterException | InvalidKeyException | NoSuchAlgorithmException | BadPaddingException | IllegalBlockSizeException | NoSuchPaddingException e) {
+            throw new Exception("Error al encriptar el archivo", e);
+        }
+    }
+    
+    public void decryptFile(File inputFile, File outputFile) throws Exception {
+        try {
+            SecretKeySpec secretKeySpec = new SecretKeySpec(key, "Camellia");
+            Cipher cipher = Cipher.getInstance(instanceString, "BC");
+
+            byte[] inputBytes = Files.readAllBytes(inputFile.toPath());
+
+            if (!instanceString.contains("ECB")) {
+                // Extraer IV del archivo cifrado
+                System.arraycopy(inputBytes, 0, iv, 0, iv.length);
+                byte[] actualCipherText = new byte[inputBytes.length - iv.length];
+                System.arraycopy(inputBytes, iv.length, actualCipherText, 0, actualCipherText.length);
+                inputBytes = actualCipherText;
+            }
+
+            if (instanceString.contains("GCM")) {
+                GCMParameterSpec gcmSpec = new GCMParameterSpec(128, iv); // 128 bits de tamaño del tag
+                cipher.init(Cipher.DECRYPT_MODE, secretKeySpec, gcmSpec);
+            } else if (!instanceString.contains("ECB")) {
+                IvParameterSpec ivSpec = new IvParameterSpec(iv);
+                cipher.init(Cipher.DECRYPT_MODE, secretKeySpec, ivSpec);
+            } else {
+                cipher.init(Cipher.DECRYPT_MODE, secretKeySpec);
+            }
+
+            byte[] outputBytes = cipher.doFinal(inputBytes);
+
+            try (FileOutputStream outputStream = new FileOutputStream(outputFile)) {
+                outputStream.write(outputBytes);
+            }
+        } catch (IOException | InvalidAlgorithmParameterException | InvalidKeyException | NoSuchAlgorithmException | BadPaddingException | IllegalBlockSizeException | NoSuchPaddingException e) {
+            throw new Exception("Error al desencriptar el archivo", e);
         }
     }
 }

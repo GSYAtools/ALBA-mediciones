@@ -84,6 +84,11 @@ public class Aes {
     }
     
     private static byte[] generateKey(int keySize) {
+        // Verificar que el tamaño de la clave es válido
+        if (keySize != 128 && keySize != 192 && keySize != 256) {
+            throw new IllegalArgumentException("El tamaño de la clave debe ser 128, 192 o 256 bits.");
+        }
+        
         try {
             KeyGenerator keyGen = KeyGenerator.getInstance("AES");
             keyGen.init(keySize);

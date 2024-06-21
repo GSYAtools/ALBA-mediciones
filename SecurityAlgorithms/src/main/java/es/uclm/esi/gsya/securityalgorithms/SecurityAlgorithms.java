@@ -73,14 +73,14 @@ public class SecurityAlgorithms {
                     Aes aes = new Aes(mode, padding, keyPath);
                     for(int t=0; t<times; t++){
                         aes.encryptFile(inputFile, outputFile);
-                        System.out.printf("File Encrypted Successfully. [%d]\n", t);
+                        System.out.printf("File Encrypted Successfully. [%d]\n", t+1);
                     }
                 }
                 case "d" -> {
                     Aes aes = new Aes(mode, padding, keyPath);
                     for(int t=0; t<times;t++){
                         aes.decryptFile(inputFile, outputFile);
-                        System.out.printf("File Decrypted Successfully.[%d]\n", t);
+                        System.out.printf("File Decrypted Successfully.[%d]\n", t+1);
                     }
                 }
                 case "g" -> {

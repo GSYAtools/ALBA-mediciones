@@ -5,7 +5,7 @@ DOCKER_DIR=docker
 CONTAINER_NAME=security-test
 
 # Verificar si el contenedor está en ejecución
-is_running = $(shell docker ps --filter "name=$(CONTAINER_NAME)" --format '{{.Names}}' | grep -w $(CONTAINER_NAME))
+is_running = $(shell docker ps --filter "name=$(CONTAINER_NAME)" | grep -w $(CONTAINER_NAME))
 
 # Objetivo por defecto (ayuda)
 .DEFAULT_GOAL := help

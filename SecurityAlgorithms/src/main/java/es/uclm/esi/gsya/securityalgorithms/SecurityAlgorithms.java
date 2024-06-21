@@ -13,8 +13,8 @@ import java.io.File;
  * @author Eugenio
  */
 public class SecurityAlgorithms { 
-    private static String runMode, inputPath, outputPath, algorithm, keyPath, times;
-    private static int keySize;
+    private static String runMode, inputPath, outputPath, algorithm, keyPath;
+    private static int keySize, times;
     
     public static void main(String[] args) {
         /* Processing arguments */
@@ -26,14 +26,14 @@ public class SecurityAlgorithms {
                 outputPath = args[2];
                 algorithm = args[3];
                 keyPath = args[4];
-                times = args[5];
+                times = Integer.parseInt(args[5]);
             }
             case "d" -> {
                 inputPath = args[1];
                 outputPath = args[2];
                 algorithm = args[3];
                 keyPath = args[4];
-                times = args[5];
+                times = Integer.parseInt(args[5]);
             }
             case "g" -> {
                 algorithm = args[1];

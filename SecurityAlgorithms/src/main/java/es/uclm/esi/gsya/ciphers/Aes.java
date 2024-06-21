@@ -77,7 +77,7 @@ public class Aes {
     public Aes(int keySize){
         key = generateKey(keySize);
         try {
-            FileHandler.saveKeyToFile(FileHandler.KEY_PATH, key);
+            FileHandler.saveKeyToFile("AES_"+keySize+".key", key);
         } catch (IOException ex) {
             ex.printStackTrace();
         }

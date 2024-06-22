@@ -6,6 +6,7 @@ package es.uclm.esi.gsya.securityalgorithms;
 
 import es.uclm.esi.gsya.ciphers.Aes;
 import es.uclm.esi.gsya.ciphers.Camellia;
+import es.uclm.esi.gsya.ciphers.ChaCha20;
 import es.uclm.esi.gsya.utils.Measure;
 import java.io.File;
 import java.io.IOException;
@@ -49,14 +50,18 @@ public class SecurityAlgorithms {
         String algName, algMode, algPadding;
         if(algData.length == 1){
             algName = algorithm; algMode = null; algPadding = null;
+        }else if(algData.length == 2){
+            algName = algData[0]; algMode = algData[1]; algPadding = null;
         } else {
             algName = algData[0]; algMode = algData[1]; algPadding = algData[2];
         }
         /* Launch algorithm */
         switch(algName){
-            case "AES" -> runAes(algMode, algPadding);
-            case "Camellia" -> runCamellia(algMode, algPadding);
-            default -> System.out.println("Algoritmo No Encontrado");
+            case "AES" : runAes(algMode, algPadding); break;
+            case "Camellia" : runCamellia(algMode, algPadding); break;
+            case "ChaCha20" :
+            case "XChaCha20" : runChaCha20(algName, algMode); break;
+            default : System.out.println("Algoritmo No Encontrado"); break;
         }
     }
     
@@ -145,4 +150,39 @@ public class SecurityAlgorithms {
             e.printStackTrace();
         }
     }
+    
+    private static void runChaCha20(String name, String mode) {
+        try {
+            File inputFile = new File(inputPath);
+            File outputFile = new File(outputPath);
+
+            // Según el modo de ejecución (cifrado, descifrado o generación de clave)
+            switch (runMode) {
+                case "e" -> {
+                    ChaCha20 chacha = new ChaCha20(mode, keyPath);
+                    for (int t = 0; t < times; t++) {
+                        chacha.encryptFile(inputFile, outputFile);
+                        System.out.printf("File Encrypted Successfully. [%d]\n", t);
+                    }
+                }
+                case "d" -> {
+                    ChaCha20 chacha = new ChaCha20(mode, keyPath);
+                    for (int t = 0; t < times; t++) {
+                        chacha.decryptFile(inputFile, outputFile);
+                        System.out.printf("File Decrypted Successfully. [%d]\n", t);
+                    }
+                }
+                case "g" -> {
+                    ChaCha20 chacha = new ChaCha20(); //Siempre la clave será de 256 bits
+                    System.out.println("Key File Generated Successfully.");
+                }
+                default -> System.out.println("Invalid run mode.");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    
 }

@@ -45,11 +45,10 @@ public class ChaCha20 {
         setupMode(mode);
     }
     
-    public ChaCha20(String mode) {
+    public ChaCha20() {
         key = generateKey();
-        setupMode(mode);
         try {
-            FileHandler.saveKeyToFile("ChaCha20_" + mode + ".key", key);
+            FileHandler.saveKeyToFile("ChaCha20.key", key);
         } catch (IOException ex) {
             ex.printStackTrace();
         }

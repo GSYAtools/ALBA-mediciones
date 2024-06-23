@@ -1,8 +1,9 @@
 # Makefile para el proyecto SecurityAlgorithms
 IMAGE_NAME=security
-JAR_PATH=SecurityAlgorithms/target/SecurityAlgorithms-1.0-jar-with-dependencies.jar
+JAR_PATH=SecurityAlgorithms/target/SecurityAlgorithms-1.1-jar-with-dependencies.jar
 DOCKER_DIR=docker
 CONTAINER_NAME=security-test
+ENTRY_PATH=entrypoint.sh
 
 # Objetivo por defecto (ayuda)
 .DEFAULT_GOAL := help
@@ -29,6 +30,8 @@ $(DOCKER_DIR)/Dockerfile: | $(DOCKER_DIR)
 	echo "FROM openjdk:20" > $(DOCKER_DIR)/Dockerfile
 	echo "COPY . /usr/app" >> $(DOCKER_DIR)/Dockerfile
 	echo "WORKDIR /usr/app" >> $(DOCKER_DIR)/Dockerfile
+	echo "RUN chmod +x /usr/app/entrypoint.sh" >> $(DOCKER_DIR)/Dockerfile
+	echo 'ENTRYPOINT ["/usr/app/entrypoint.sh"]' >> $(DOCKER_DIR)/Dockerfile
 
 # Regla para crear el directorio docker
 $(DOCKER_DIR):
@@ -37,6 +40,7 @@ $(DOCKER_DIR):
 # Regla para copiar el JAR al directorio docker
 copy-jar: $(DOCKER_DIR)
 	cp $(JAR_PATH) $(DOCKER_DIR)
+	cp $(ENTRY_PATH) $(DOCKER_DIR)
 
 # Regla para construir la imagen Docker
 build: prepare copy-jar

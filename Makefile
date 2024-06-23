@@ -45,22 +45,14 @@ copy-jar: $(DOCKER_DIR)
 # Regla para construir la imagen Docker
 build: prepare copy-jar
 	docker build -t $(IMAGE_NAME) $(DOCKER_DIR)
+	docker run -it --name $(CONTAINER_NAME) $(IMAGE_NAME)
 
 # Regla para reconstruir la imagen Docker
 rebuild: copy-jar
 	docker rm -f $(CONTAINER_NAME)
 	docker rmi -f $(IMAGE_NAME)
 	docker build -t $(IMAGE_NAME) $(DOCKER_DIR)
-
-# Regla para ejecutar el contenedor Docker
-encrypt:
-	docker run -ti --name $(CONTAINER_NAME) $(IMAGE_NAME) java -jar $(notdir $(JAR_PATH)) e $(INPUT) $(OUTPUT) $(ALG) $(KEY) $(TIMES)
-
-decrypt:
-	docker run -ti --name $(CONTAINER_NAME) $(IMAGE_NAME) java -jar $(notdir $(JAR_PATH)) d $(INPUT) $(OUTPUT) $(ALG) $(KEY) $(TIMES)
-
-keygen:
-	docker run -ti --name $(CONTAINER_NAME) $(IMAGE_NAME) java -jar $(notdir $(JAR_PATH)) g $(ALG) $(KEYSIZE)
+	docker run -it --name $(CONTAINER_NAME) $(IMAGE_NAME)
 
 # Regla para limpiar el directorio docker y eliminar el contenedor
 clean:

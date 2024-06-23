@@ -18,14 +18,6 @@ public class Measure {
     private static ThreadMXBean threadMXBean = ManagementFactory.getThreadMXBean();
     private static long CPUsTime, CPUeTime;
     
-    public static void getStartTime(){
-        sTime = System.nanoTime();
-    }
-    
-    public static void getEndTime(){
-        eTime = System.nanoTime();
-    }
-    
     public static long getLastTimeMeasure(){
         return eTime - sTime;
     }

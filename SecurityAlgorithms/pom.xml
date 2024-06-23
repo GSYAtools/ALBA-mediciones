@@ -6,7 +6,7 @@
 
     <groupId>es.uclm.esi.gsya</groupId>
     <artifactId>SecurityAlgorithms</artifactId>
-    <version>1.0</version>
+    <version>1.1</version>
     <packaging>jar</packaging>
 
     <dependencies>
@@ -35,7 +35,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>es.uclm.esi.gsya.securityalgorithms.SecurityAlgorithms</mainClass>
+                            <mainClass>es.uclm.esi.gsya.securityalgorithms.SecurityAlgorithmsCLI</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
@@ -51,7 +51,7 @@
                     </descriptorRefs>
                     <archive>
                         <manifest>
-                            <mainClass>es.uclm.esi.gsya.securityalgorithms.SecurityAlgorithms</mainClass>
+                            <mainClass>es.uclm.esi.gsya.securityalgorithms.SecurityAlgorithmsCLI</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

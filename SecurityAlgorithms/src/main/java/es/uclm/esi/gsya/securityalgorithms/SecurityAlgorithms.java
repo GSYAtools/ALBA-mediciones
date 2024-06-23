@@ -90,9 +90,7 @@ public class SecurityAlgorithms {
                 case "e" -> {
                     Aes aes = new Aes(mode, padding, keyPath);
                     for(int t=0; t<times; t++){
-                        Measure.getStartTime();
                         aes.encryptFile(inputFile, outputFile);
-                        Measure.getEndTime();
                         System.out.printf("File Encrypted Successfully. [%d]\n", t+1);
                         showMeasures();
                     }

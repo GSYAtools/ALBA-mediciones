@@ -59,6 +59,7 @@ public class Aes {
     private byte[] key;
     private String instanceString = "AES/";
     private byte[] iv;
+    private String keyFileName;
     
     public Aes(String mode, String padding, String keyPath){
         try {
@@ -77,7 +78,8 @@ public class Aes {
     public Aes(int keySize){
         key = generateKey(keySize);
         try {
-            FileHandler.saveKeyToFile("AES_"+keySize+".key", key);
+            keyFileName = "AES_"+keySize+".key";
+            FileHandler.saveKeyToFile(keyFileName, key);
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -168,5 +170,9 @@ public class Aes {
         } catch (IOException | InvalidAlgorithmParameterException | InvalidKeyException | NoSuchAlgorithmException | BadPaddingException | IllegalBlockSizeException | NoSuchPaddingException e) {
             throw new Exception("Error al desencriptar el archivo", e);
         }
+    }
+
+    public String getKeyFileName() {
+        return keyFileName;
     }
 }

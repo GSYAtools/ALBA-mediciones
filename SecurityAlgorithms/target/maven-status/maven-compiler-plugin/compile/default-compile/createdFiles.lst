@@ -1,1 +1,3 @@
-es/uclm/esi/gsya/utils/Measure.class
+es\uclm\esi\gsya\utils\Measure.class
+es\uclm\esi\gsya\ciphers\ChaCha20.class
+es\uclm\esi\gsya\securityalgorithms\SecurityAlgorithmsCLI.class

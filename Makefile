@@ -1,6 +1,7 @@
 # Makefile para el proyecto SecurityAlgorithms
 IMAGE_NAME=security
 JAR_PATH=SecurityAlgorithms/target/SecurityAlgorithms-1.1-jar-with-dependencies.jar
+APP_NAME=SecurityAlgorithms.jar
 DOCKER_DIR=docker
 CONTAINER_NAME=security-test
 ENTRY_PATH=entrypoint.sh
@@ -39,7 +40,7 @@ $(DOCKER_DIR):
 
 # Regla para copiar el JAR al directorio docker
 copy-jar: $(DOCKER_DIR)
-	cp $(JAR_PATH) $(DOCKER_DIR)
+	cp $(JAR_PATH) $(DOCKER_DIR)/$(APP_NAME)
 	cp $(ENTRY_PATH) $(DOCKER_DIR)
 
 # Regla para construir la imagen Docker

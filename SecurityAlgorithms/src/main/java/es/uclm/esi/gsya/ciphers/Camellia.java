@@ -57,15 +57,12 @@ import javax.crypto.spec.SecretKeySpec;
  *  - NoPadding
  * OCB
  *  - NoPadding
- * XTS
- *  - NoPadding
  *
  * Notas:
  * - ECB: Menos seguro debido a la igualdad de cifrados para bloques idénticos de texto plano.
  * - CBC: Adecuado para la mayoría de las aplicaciones que requieren seguridad mejorada respecto a ECB.
  * - CFB, OFB, CTR: Modos que permiten operar sobre flujos de datos y no requieren padding.
  * - GCM, CCM, EAX, OCB: Modos que proporcionan autenticación de mensaje junto con cifrado.
- * - XTS: Especializado para cifrado de datos de almacenamiento como discos.
  */
 
 
@@ -82,7 +79,7 @@ public class Camellia {
         // Añadir BouncyCastle como proveedor de seguridad
         Security.addProvider(new BouncyCastleProvider());
 
-        if (mode.equals("GCM")){
+        if (mode.equals("GCM") || mode.equals("OCB") || mode.equals("CCM")){
             iv = generateIv(12);
         } else if (!mode.equals("ECB")) {
             iv = generateIv(16);

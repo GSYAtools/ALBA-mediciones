@@ -73,16 +73,12 @@ public class SecurityAlgorithmsCLI {
                 if("keygen".equalsIgnoreCase(operation)){
                     CiphersController.runChaCha20();
                 }else if(("encrypt".equalsIgnoreCase(operation) || "decrypt".equalsIgnoreCase(operation)) && !cmd.hasOption("times")){
-                    if(mode == null)
-                        CiphersController.runChaCha20(operation, algorithm, keyPath, inputPath, outputPath);
-                    else
+                    if(mode != null)
                         CiphersController.runChaCha20(operation, algorithm+"-"+mode, keyPath, inputPath, outputPath);
                 }else {
                     if(times != null && times.matches("^[1-9]\\d*$")){
-                        if(mode == null)
-                            CiphersController.runChaCha20(operation, "ChaCha20-"+mode, keyPath, inputPath, outputPath, Integer.parseInt(times));
-                        else
-                            CiphersController.runChaCha20(operation, "ChaCha20", keyPath, inputPath, outputPath, Integer.parseInt(times));
+                        if(mode != null)
+                            CiphersController.runChaCha20(operation, algorithm+"-"+mode, keyPath, inputPath, outputPath, Integer.parseInt(times));
                     }
                 }
             } else {

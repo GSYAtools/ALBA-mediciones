@@ -60,15 +60,10 @@ public class ChaCha20 {
     // Configuración del modo de cifrado
     private void setupMode(String mode) {
         switch (mode) {
-            case "ChaCha20-Poly1305":
+            case "ChaCha20-Poly1305" -> {
                 this.instanceString = "ChaCha20-Poly1305";
                 this.nonce = generateNonce(12); // 12 bytes para ChaCha20-Poly1305
-                break;
-            case "ChaCha20":
-            default:
-                this.instanceString = "ChaCha20";
-                this.nonce = generateNonce(12); // 12 bytes para ChaCha20
-                break;
+            }
         }
     }
 
@@ -100,9 +95,6 @@ public class ChaCha20 {
 
             if (instanceString.equals("ChaCha20-Poly1305")) {
                 GCMParameterSpec paramSpec = new GCMParameterSpec(128, nonce);
-                cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec, paramSpec);
-            } else {
-                ChaCha20ParameterSpec paramSpec = new ChaCha20ParameterSpec(nonce, 0);
                 cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec, paramSpec);
             }
 
@@ -137,9 +129,6 @@ public class ChaCha20 {
 
             if (instanceString.equals("ChaCha20-Poly1305")) {
                 GCMParameterSpec paramSpec = new GCMParameterSpec(128, nonceFromFile);
-                cipher.init(Cipher.DECRYPT_MODE, secretKeySpec, paramSpec);
-            } else {
-                ChaCha20ParameterSpec paramSpec = new ChaCha20ParameterSpec(nonceFromFile, 0);
                 cipher.init(Cipher.DECRYPT_MODE, secretKeySpec, paramSpec);
             }
 

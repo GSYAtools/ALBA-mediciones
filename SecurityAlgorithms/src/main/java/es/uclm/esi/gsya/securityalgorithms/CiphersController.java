@@ -6,6 +6,7 @@ package es.uclm.esi.gsya.securityalgorithms;
 
 import es.uclm.esi.gsya.ciphers.Aes;
 import es.uclm.esi.gsya.ciphers.Camellia;
+import es.uclm.esi.gsya.ciphers.ChaCha20;
 import es.uclm.esi.gsya.utils.Measure;
 import java.io.File;
 import java.io.IOException;
@@ -26,7 +27,7 @@ public class CiphersController {
         System.out.printf("Input File size: %d bytes\n", fi);
         System.out.printf("Output File Size: %d bytes\n", fo);
         System.out.printf("Compression Percentage: %d %%\n", cp);
-        System.out.printf("Execution Time: %d ns\n", Measure.getLastCpuTimeMeasure());
+        System.out.printf("Execution Time: %d ns (%d ms)\n", Measure.getLastCpuTimeMeasure(), Measure.getLastCpuTimeMeasure()/1000000);
     }
     
     /*
@@ -159,6 +160,80 @@ public class CiphersController {
                 try {
                     Measure.startCPUMeasurement();
                     camellia.decryptFile(new File(input), new File(output));
+                    Measure.stopCPUMeasurement();
+                    System.out.printf("\n[Execution #%d] File Succesfully Decrypted.\n", i);
+                    showMeasures(input, output);
+                } catch (Exception ex) {
+                    Logger.getLogger(CiphersController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+    }
+    
+    /*
+    MÉTODOS PARA LA EJECUCIÓN DE CHACHA20
+    */
+    public static void runChaCha20(){
+        ChaCha20 chacha = new ChaCha20();
+        System.out.printf("\nKey File Successfully Generated with name: %s\n", chacha.getKeyFileName());
+    }
+    
+    public static void runChaCha20(String operation, String mode, String key, String input, String output) {
+        ChaCha20 chacha;
+        try {
+            chacha = new ChaCha20(mode, key);
+        } catch (Exception ex) {
+            Logger.getLogger(CiphersController.class.getName()).log(Level.SEVERE, null, ex);
+            return;
+        }
+        if("encrypt".equalsIgnoreCase(operation)){
+            try {
+                Measure.startCPUMeasurement();
+                chacha.encryptFile(new File(input), new File(output));
+                Measure.stopCPUMeasurement();
+                System.out.printf("\nFile Succesfully Encrypted.\n");
+                showMeasures(input, output);
+            } catch (Exception ex) {
+                Logger.getLogger(CiphersController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }else if("decrypt".equalsIgnoreCase(operation)){
+            try {
+                Measure.startCPUMeasurement();
+                chacha.decryptFile(new File(input), new File(output));
+                Measure.stopCPUMeasurement();
+                System.out.printf("\nFile Succesfully Decrypted.\n");
+                showMeasures(input, output);
+            } catch (Exception ex) {
+                Logger.getLogger(CiphersController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+    
+    public static void runChaCha20(String operation, String mode, String key, String input, String output, int times) {
+        ChaCha20 chacha;
+        try {
+            chacha = new ChaCha20(mode, key);
+        } catch (Exception ex) {
+            Logger.getLogger(CiphersController.class.getName()).log(Level.SEVERE, null, ex);
+            return;
+        }
+        if("encrypt".equalsIgnoreCase(operation)){
+            for(int i=0; i<times;i++) {
+                try {
+                    Measure.startCPUMeasurement();
+                    chacha.encryptFile(new File(input), new File(output));
+                    Measure.stopCPUMeasurement();
+                    System.out.printf("\n[Execution #%d] File Succesfully Encrypted.\n", i);
+                    showMeasures(input, output);
+                } catch (Exception ex) {
+                    Logger.getLogger(CiphersController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }else if("decrypt".equalsIgnoreCase(operation)){
+            for(int i=0; i<times;i++) {
+                try {
+                    Measure.startCPUMeasurement();
+                    chacha.decryptFile(new File(input), new File(output));
                     Measure.stopCPUMeasurement();
                     System.out.printf("\n[Execution #%d] File Succesfully Decrypted.\n", i);
                     showMeasures(input, output);

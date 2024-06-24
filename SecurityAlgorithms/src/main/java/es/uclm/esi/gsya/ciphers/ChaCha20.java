@@ -33,6 +33,7 @@ public class ChaCha20 {
     private byte[] key;
     private byte[] nonce;
     private String instanceString;
+    private String keyFileName;
     
     public ChaCha20(String mode, String keyPath) throws Exception {
         try {
@@ -48,7 +49,8 @@ public class ChaCha20 {
     public ChaCha20() {
         key = generateKey();
         try {
-            FileHandler.saveKeyToFile("ChaCha20.key", key);
+            keyFileName = "ChaCha20.key";
+            FileHandler.saveKeyToFile(keyFileName, key);
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -147,6 +149,10 @@ public class ChaCha20 {
         } catch (IOException | InvalidAlgorithmParameterException | InvalidKeyException | NoSuchAlgorithmException | BadPaddingException | IllegalBlockSizeException | NoSuchPaddingException e) {
             throw new Exception("Error al desencriptar el archivo", e);
         }
+    }
+    
+    public String getKeyFileName() {
+        return keyFileName;
     }
 }
 

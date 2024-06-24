@@ -67,7 +67,7 @@ public class Aes {
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-        instanceString += mode + "/" + padding;
+        instanceString += mode.toUpperCase() + "/" + padding;
         if (mode.equals("GCM")){
             iv = generateIv(12);
         } else if (!mode.equals("ECB")) {

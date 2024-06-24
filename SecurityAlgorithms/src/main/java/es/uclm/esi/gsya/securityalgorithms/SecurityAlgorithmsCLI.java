@@ -68,7 +68,7 @@ public class SecurityAlgorithmsCLI {
                         CiphersController.runCamellia(operation, mode, padding, keyPath, inputPath, outputPath, Integer.parseInt(times));
                     }
                 }
-            } else if ("ChaCha20".equals(algorithm) || "XChaCha20".equals(algorithm)) {
+            } else if ("ChaCha20".equalsIgnoreCase(algorithm)) {
                 // Realizamos las operaciones con ChaCha20
                 if("keygen".equalsIgnoreCase(operation)){
                     CiphersController.runChaCha20();
@@ -79,10 +79,10 @@ public class SecurityAlgorithmsCLI {
                         CiphersController.runChaCha20(operation, algorithm+"-"+mode, keyPath, inputPath, outputPath);
                 }else {
                     if(times != null && times.matches("^[1-9]\\d*$")){
-                        if(cmd.hasOption(mode))
-                            CiphersController.runChaCha20(operation, algorithm+"-"+mode, keyPath, inputPath, outputPath, Integer.parseInt(times));
+                        if(mode == null)
+                            CiphersController.runChaCha20(operation, "ChaCha20-"+mode, keyPath, inputPath, outputPath, Integer.parseInt(times));
                         else
-                            CiphersController.runChaCha20(operation, algorithm, keyPath, inputPath, outputPath, Integer.parseInt(times));
+                            CiphersController.runChaCha20(operation, "ChaCha20", keyPath, inputPath, outputPath, Integer.parseInt(times));
                     }
                 }
             } else {

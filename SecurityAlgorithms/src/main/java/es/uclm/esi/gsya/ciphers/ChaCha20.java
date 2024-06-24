@@ -70,7 +70,7 @@ public class ChaCha20 {
                 this.instanceString = "XChaCha20";
                 this.nonce = generateNonce(24); // 24 bytes para XChaCha20
                 break;
-            default:
+            case "ChaCha20":
                 this.instanceString = "ChaCha20";
                 this.nonce = generateNonce(12); // 12 bytes para ChaCha20
                 break;

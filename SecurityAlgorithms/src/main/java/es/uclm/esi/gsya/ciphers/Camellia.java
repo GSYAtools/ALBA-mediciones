@@ -73,14 +73,11 @@ public class Camellia {
     private byte[] key;
     private String instanceString = "Camellia/";
     private byte[] iv;
+    private String keyFileName;
     
-    public Camellia(String mode, String padding, String keyPath) throws Exception {
-        try {
-            key = FileHandler.readKeyFromFile(keyPath);
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-        instanceString += mode + "/" + padding;
+    public Camellia(String mode, String padding, String keyPath) throws IOException {
+        key = FileHandler.readKeyFromFile(keyPath);
+        instanceString += mode.toUpperCase() + "/" + padding;
 
         // Añadir BouncyCastle como proveedor de seguridad
         Security.addProvider(new BouncyCastleProvider());
@@ -92,13 +89,10 @@ public class Camellia {
         }
     }
 
-    public Camellia(int keySize) throws NoSuchProviderException {
+    public Camellia(int keySize) throws NoSuchProviderException, IOException {
         key = generateKey(keySize);
-        try {
-            FileHandler.saveKeyToFile("Camellia_" + keySize + ".key", key);
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
+        keyFileName = "Camellia_" + keySize + ".key";
+        FileHandler.saveKeyToFile(keyFileName, key);
     }
     
     private static byte[] generateKey(int keySize) throws NoSuchProviderException {
@@ -186,5 +180,9 @@ public class Camellia {
         } catch (IOException | InvalidAlgorithmParameterException | InvalidKeyException | NoSuchAlgorithmException | BadPaddingException | IllegalBlockSizeException | NoSuchPaddingException e) {
             throw new Exception("Error al desencriptar el archivo", e);
         }
+    }
+    
+    public String getKeyFileName() {
+        return keyFileName;
     }
 }

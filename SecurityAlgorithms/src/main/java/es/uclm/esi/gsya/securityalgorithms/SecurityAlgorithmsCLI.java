@@ -4,8 +4,6 @@
 
 package es.uclm.esi.gsya.securityalgorithms;
 
-import es.uclm.esi.gsya.utils.Measure;
-import java.io.IOException;
 import org.apache.commons.cli.*;
 
 /**
@@ -59,6 +57,17 @@ public class SecurityAlgorithmsCLI {
                 }
             } else if ("Camellia".equalsIgnoreCase(algorithm)) {
                 // Realizamos las operaciones con Camellia
+                if("keygen".equalsIgnoreCase(operation)){
+                    if(keyPath != null && keyPath.matches("^[1-9]\\d*$")){
+                        CiphersController.runCamellia(Integer.parseInt(keyPath));
+                    }
+                }else if(("encrypt".equalsIgnoreCase(operation) || "decrypt".equalsIgnoreCase(operation)) && !cmd.hasOption("times")){
+                    CiphersController.runCamellia(operation, mode, padding, keyPath, inputPath, outputPath);
+                }else {
+                    if(times != null && times.matches("^[1-9]\\d*$")){
+                        CiphersController.runCamellia(operation, mode, padding, keyPath, inputPath, outputPath, Integer.parseInt(times));
+                    }
+                }
             } else if ("ChaCha20".equalsIgnoreCase(algorithm) || "XChaCha20".equalsIgnoreCase(algorithm)) {
                 // Realizamos las operaciones con ChaCha20
             } else {

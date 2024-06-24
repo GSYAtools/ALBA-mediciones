@@ -30,12 +30,10 @@ import javax.crypto.spec.SecretKeySpec;
  *
  * Modes:
  * ECB
- *  - NoPadding
  *  - PKCS5Padding
  *  - PKCS7Padding
  *  - ISO10126Padding
  * CBC
- *  - NoPadding
  *  - PKCS5Padding
  *  - PKCS7Padding
  *  - ISO10126Padding

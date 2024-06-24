@@ -5,9 +5,11 @@
 package es.uclm.esi.gsya.securityalgorithms;
 
 import es.uclm.esi.gsya.ciphers.Aes;
+import es.uclm.esi.gsya.ciphers.Camellia;
 import es.uclm.esi.gsya.utils.Measure;
 import java.io.File;
 import java.io.IOException;
+import java.security.NoSuchProviderException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -27,6 +29,9 @@ public class CiphersController {
         System.out.printf("Execution Time: %d ns\n", Measure.getLastCpuTimeMeasure());
     }
     
+    /*
+    MÉTODOS PARA LA EJECUCIÓN DE AES
+    */
     public static void runAes(int key){
         Aes aes = new Aes(key);
         System.out.printf("\nKey File Successfully Generated with name: %s\n",aes.getKeyFileName());
@@ -86,4 +91,81 @@ public class CiphersController {
         }
     }
     
+    /*
+    MÉTODOS PARA LA EJECUCIÓN DE CAMELLIA
+    */
+    public static void runCamellia(int key){
+        try {
+            Camellia camellia = new Camellia(key);
+            System.out.printf("\nKey File Successfully Generated with name: %s\n",camellia.getKeyFileName());
+        } catch (NoSuchProviderException | IOException ex) {
+            Logger.getLogger(CiphersController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public static void runCamellia(String operation, String mode, String padding, String key, String input, String output) {
+        Camellia camellia;
+        try {
+            camellia = new Camellia(mode, padding, key);
+        } catch (IOException ex) {
+            Logger.getLogger(CiphersController.class.getName()).log(Level.SEVERE, null, ex);
+            return;
+        }
+        if("encrypt".equalsIgnoreCase(operation)){
+            try {
+                Measure.startCPUMeasurement();
+                camellia.encryptFile(new File(input), new File(output));
+                Measure.stopCPUMeasurement();
+                System.out.printf("\nFile Succesfully Encrypted.\n");
+                showMeasures(input, output);
+            } catch (Exception ex) {
+                Logger.getLogger(CiphersController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }else if("decrypt".equalsIgnoreCase(operation)){
+            try {
+                Measure.startCPUMeasurement();
+                camellia.decryptFile(new File(input), new File(output));
+                Measure.stopCPUMeasurement();
+                System.out.printf("\nFile Succesfully Decrypted.\n");
+                showMeasures(input, output);
+            } catch (Exception ex) {
+                Logger.getLogger(CiphersController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+    
+    public static void runCamellia(String operation, String mode, String padding, String key, String input, String output, int times) {
+        Camellia camellia;
+        try {
+            camellia = new Camellia(mode, padding, key);
+        } catch (IOException ex) {
+            Logger.getLogger(CiphersController.class.getName()).log(Level.SEVERE, null, ex);
+            return;
+        }
+        if("encrypt".equalsIgnoreCase(operation)){
+            for(int i=0; i<times;i++) {
+                try {
+                    Measure.startCPUMeasurement();
+                    camellia.encryptFile(new File(input), new File(output));
+                    Measure.stopCPUMeasurement();
+                    System.out.printf("\n[Execution #%d] File Succesfully Encrypted.\n", i);
+                    showMeasures(input, output);
+                } catch (Exception ex) {
+                    Logger.getLogger(CiphersController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }else if("decrypt".equalsIgnoreCase(operation)){
+            for(int i=0; i<times;i++) {
+                try {
+                    Measure.startCPUMeasurement();
+                    camellia.decryptFile(new File(input), new File(output));
+                    Measure.stopCPUMeasurement();
+                    System.out.printf("\n[Execution #%d] File Succesfully Decrypted.\n", i);
+                    showMeasures(input, output);
+                } catch (Exception ex) {
+                    Logger.getLogger(CiphersController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+    }
 }

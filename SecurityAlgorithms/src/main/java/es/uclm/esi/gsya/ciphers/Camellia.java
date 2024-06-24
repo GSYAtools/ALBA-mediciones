@@ -102,6 +102,7 @@ public class Camellia {
         }
         
         try {
+            Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
             KeyGenerator keyGen = KeyGenerator.getInstance("Camellia", "BC");
             keyGen.init(keySize);
             SecretKey secretKey = keyGen.generateKey();

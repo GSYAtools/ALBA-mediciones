@@ -83,8 +83,7 @@ WORKDIR /usr/app</code></pre>
 <th>Padding</th>
 </tr>
 <tr>
-<td rowspan="4">ECB</td>
-<td>NoPadding</td>
+<td rowspan="3">ECB</td>
 </tr>
 <tr>
 <td>PKCS5Padding</td>
@@ -96,8 +95,7 @@ WORKDIR /usr/app</code></pre>
 <td>ISO10126Padding</td>
 </tr>
 <tr>
-<td rowspan="4">CBC</td>
-<td>NoPadding</td>
+<td rowspan="3">CBC</td>
 </tr>
 <tr>
 <td>PKCS5Padding</td>

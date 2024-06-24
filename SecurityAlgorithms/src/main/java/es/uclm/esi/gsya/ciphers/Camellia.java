@@ -51,8 +51,6 @@ import javax.crypto.spec.SecretKeySpec;
  *  - NoPadding
  * GCM
  *  - NoPadding
- * CCM
- *  - NoPadding
  * EAX
  *  - NoPadding
  * OCB
@@ -79,7 +77,7 @@ public class Camellia {
         // Añadir BouncyCastle como proveedor de seguridad
         Security.addProvider(new BouncyCastleProvider());
 
-        if (mode.equals("GCM") || mode.equals("OCB") || mode.equals("CCM")){
+        if (mode.equals("GCM") || mode.equals("OCB")){
             iv = generateIv(12);
         } else if (!mode.equals("ECB")) {
             iv = generateIv(16);
@@ -110,7 +108,7 @@ public class Camellia {
     }
     
     private static byte[] generateIv(int size) {
-        byte[] iv = new byte[size]; // 12 bytes (96 bits) para GCM, 16 bytes (128 bits) para otros modos
+        byte[] iv = new byte[size]; // 12 bytes (96 bits) para GCM/OCB, 16 bytes (128 bits) para otros modos
         SecureRandom secureRandom = new SecureRandom();
         secureRandom.nextBytes(iv);
         return iv;

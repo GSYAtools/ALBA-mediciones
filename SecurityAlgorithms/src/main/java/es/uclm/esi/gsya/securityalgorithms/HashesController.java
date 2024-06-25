@@ -37,7 +37,9 @@ public class HashesController {
         Md5 md5 = new Md5();
         
         //Genero el resumen
+        Measure.startCPUMeasurement();
         String hash = md5.generateMd5(new File(input));
+        Measure.stopCPUMeasurement();
         
         try {
             FileHandler.saveTextToFile(hashFileName, hash);
@@ -45,6 +47,13 @@ public class HashesController {
         } catch (IOException ex) {
             Logger.getLogger(HashesController.class.getName()).log(Level.SEVERE, null, ex);
             System.out.println("Could not save MD5 hash to file.");
+        }
+        
+        try {
+            showMeasures(input, hashFileName);
+        } catch (IOException ex) {
+            Logger.getLogger(HashesController.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Could not read files to show measures");
         }
     }
     

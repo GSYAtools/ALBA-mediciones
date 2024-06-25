@@ -1,8 +1,9 @@
-es/uclm/esi/gsya/ciphers/Camellia.class
+es/uclm/esi/gsya/hashes/Md5.class
+es/uclm/esi/gsya/ciphers/symmetric/Aes.class
+es/uclm/esi/gsya/ciphers/symmetric/ChaCha20.class
 es/uclm/esi/gsya/securityalgorithms/SecurityAlgorithmsCLI.class
-es/uclm/esi/gsya/ciphers/ChaCha20.class
-es/uclm/esi/gsya/ciphers/Aes.class
+es/uclm/esi/gsya/securityalgorithms/HashesController.class
 es/uclm/esi/gsya/utils/Measure.class
-es/uclm/esi/gsya/securityalgorithms/SecurityAlgorithms.class
-es/uclm/esi/gsya/securityalgorithms/CiphersController.class
+es/uclm/esi/gsya/securityalgorithms/SymmetricCiphersController.class
+es/uclm/esi/gsya/ciphers/symmetric/Camellia.class
 es/uclm/esi/gsya/utils/FileHandler.class

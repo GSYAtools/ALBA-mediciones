@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package es.uclm.esi.gsya.hashes;
 
 import java.io.File;
@@ -34,7 +30,7 @@ public class Md5 {
             // Reiniciar el MessageDigest
             md.reset();
 
-            // Leer el archivo en bloques de 1024 bytes (o el tamaño que se prefiera)
+            // Leer el archivo en bloques de 1024 bytes
             byte[] buffer = new byte[1024];
             int bytesRead;
             while ((bytesRead = fis.read(buffer)) != -1) {

@@ -1,4 +1,4 @@
-package es.uclm.esi.gsya.ciphers;
+package es.uclm.esi.gsya.ciphers.symmetric;
 
 import es.uclm.esi.gsya.utils.FileHandler;
 import java.io.File;

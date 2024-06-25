@@ -46,39 +46,39 @@ public class SecurityAlgorithmsCLI {
                 //Realizamos las operaciones con AES
                 if("keygen".equalsIgnoreCase(operation)){
                     if(keyPath != null && keyPath.matches("^[1-9]\\d*$")){
-                        CiphersController.runAes(Integer.parseInt(keyPath));
+                        SymmetricCiphersController.runAes(Integer.parseInt(keyPath));
                     }
                 }else if(("encrypt".equalsIgnoreCase(operation) || "decrypt".equalsIgnoreCase(operation)) && !cmd.hasOption("times")){
-                    CiphersController.runAes(operation, mode, padding, keyPath, inputPath, outputPath);
+                    SymmetricCiphersController.runAes(operation, mode, padding, keyPath, inputPath, outputPath);
                 }else {
                     if(times != null && times.matches("^[1-9]\\d*$")){
-                        CiphersController.runAes(operation, mode, padding, keyPath, inputPath, outputPath, Integer.parseInt(times));
+                        SymmetricCiphersController.runAes(operation, mode, padding, keyPath, inputPath, outputPath, Integer.parseInt(times));
                     }
                 }
             } else if ("Camellia".equalsIgnoreCase(algorithm)) {
                 // Realizamos las operaciones con Camellia
                 if("keygen".equalsIgnoreCase(operation)){
                     if(keyPath != null && keyPath.matches("^[1-9]\\d*$")){
-                        CiphersController.runCamellia(Integer.parseInt(keyPath));
+                        SymmetricCiphersController.runCamellia(Integer.parseInt(keyPath));
                     }
                 }else if(("encrypt".equalsIgnoreCase(operation) || "decrypt".equalsIgnoreCase(operation)) && !cmd.hasOption("times")){
-                    CiphersController.runCamellia(operation, mode, padding, keyPath, inputPath, outputPath);
+                    SymmetricCiphersController.runCamellia(operation, mode, padding, keyPath, inputPath, outputPath);
                 }else {
                     if(times != null && times.matches("^[1-9]\\d*$")){
-                        CiphersController.runCamellia(operation, mode, padding, keyPath, inputPath, outputPath, Integer.parseInt(times));
+                        SymmetricCiphersController.runCamellia(operation, mode, padding, keyPath, inputPath, outputPath, Integer.parseInt(times));
                     }
                 }
             } else if ("ChaCha20".equalsIgnoreCase(algorithm)) {
                 // Realizamos las operaciones con ChaCha20
                 if("keygen".equalsIgnoreCase(operation)){
-                    CiphersController.runChaCha20();
+                    SymmetricCiphersController.runChaCha20();
                 }else if(("encrypt".equalsIgnoreCase(operation) || "decrypt".equalsIgnoreCase(operation)) && !cmd.hasOption("times")){
                     if(mode != null)
-                        CiphersController.runChaCha20(operation, algorithm+"-"+mode, keyPath, inputPath, outputPath);
+                        SymmetricCiphersController.runChaCha20(operation, algorithm+"-"+mode, keyPath, inputPath, outputPath);
                 }else {
                     if(times != null && times.matches("^[1-9]\\d*$")){
                         if(mode != null)
-                            CiphersController.runChaCha20(operation, algorithm+"-"+mode, keyPath, inputPath, outputPath, Integer.parseInt(times));
+                            SymmetricCiphersController.runChaCha20(operation, algorithm+"-"+mode, keyPath, inputPath, outputPath, Integer.parseInt(times));
                     }
                 }
             } else {

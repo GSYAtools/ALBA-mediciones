@@ -4,9 +4,9 @@
  */
 package es.uclm.esi.gsya.securityalgorithms;
 
-import es.uclm.esi.gsya.ciphers.Aes;
-import es.uclm.esi.gsya.ciphers.Camellia;
-import es.uclm.esi.gsya.ciphers.ChaCha20;
+import es.uclm.esi.gsya.ciphers.symmetric.Aes;
+import es.uclm.esi.gsya.ciphers.symmetric.Camellia;
+import es.uclm.esi.gsya.ciphers.symmetric.ChaCha20;
 import es.uclm.esi.gsya.utils.Measure;
 import java.io.File;
 import java.io.IOException;
@@ -18,7 +18,7 @@ import java.util.logging.Logger;
  *
  * @author Eugenio
  */
-public class CiphersController {
+public class SymmetricCiphersController {
     
     private static void showMeasures(String inputPath, String outputPath) throws IOException{
         long fi = Measure.getFileSize(inputPath);
@@ -48,7 +48,7 @@ public class CiphersController {
                 System.out.printf("\nFile Succesfully Encrypted.\n");
                 showMeasures(input, output);
             } catch (Exception ex) {
-                Logger.getLogger(CiphersController.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(SymmetricCiphersController.class.getName()).log(Level.SEVERE, null, ex);
             }
         }else if("decrypt".equalsIgnoreCase(operation)){
             try {
@@ -58,7 +58,7 @@ public class CiphersController {
                 System.out.printf("\nFile Succesfully Decrypted.\n");
                 showMeasures(input, output);
             } catch (Exception ex) {
-                Logger.getLogger(CiphersController.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(SymmetricCiphersController.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
@@ -74,7 +74,7 @@ public class CiphersController {
                     System.out.printf("\n[Execution #%d] File Succesfully Encrypted.\n", i);
                     showMeasures(input, output);
                 } catch (Exception ex) {
-                    Logger.getLogger(CiphersController.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(SymmetricCiphersController.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         }else if("decrypt".equalsIgnoreCase(operation)){
@@ -86,7 +86,7 @@ public class CiphersController {
                     System.out.printf("\n[Execution #%d] File Succesfully Decrypted.\n", i);
                     showMeasures(input, output);
                 } catch (Exception ex) {
-                    Logger.getLogger(CiphersController.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(SymmetricCiphersController.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         }
@@ -100,7 +100,7 @@ public class CiphersController {
             Camellia camellia = new Camellia(key);
             System.out.printf("\nKey File Successfully Generated with name: %s\n",camellia.getKeyFileName());
         } catch (NoSuchProviderException | IOException ex) {
-            Logger.getLogger(CiphersController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(SymmetricCiphersController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
@@ -109,7 +109,7 @@ public class CiphersController {
         try {
             camellia = new Camellia(mode, padding, key);
         } catch (IOException ex) {
-            Logger.getLogger(CiphersController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(SymmetricCiphersController.class.getName()).log(Level.SEVERE, null, ex);
             return;
         }
         if("encrypt".equalsIgnoreCase(operation)){
@@ -120,7 +120,7 @@ public class CiphersController {
                 System.out.printf("\nFile Succesfully Encrypted.\n");
                 showMeasures(input, output);
             } catch (Exception ex) {
-                Logger.getLogger(CiphersController.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(SymmetricCiphersController.class.getName()).log(Level.SEVERE, null, ex);
             }
         }else if("decrypt".equalsIgnoreCase(operation)){
             try {
@@ -130,7 +130,7 @@ public class CiphersController {
                 System.out.printf("\nFile Succesfully Decrypted.\n");
                 showMeasures(input, output);
             } catch (Exception ex) {
-                Logger.getLogger(CiphersController.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(SymmetricCiphersController.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
@@ -140,7 +140,7 @@ public class CiphersController {
         try {
             camellia = new Camellia(mode, padding, key);
         } catch (IOException ex) {
-            Logger.getLogger(CiphersController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(SymmetricCiphersController.class.getName()).log(Level.SEVERE, null, ex);
             return;
         }
         if("encrypt".equalsIgnoreCase(operation)){
@@ -152,7 +152,7 @@ public class CiphersController {
                     System.out.printf("\n[Execution #%d] File Succesfully Encrypted.\n", i);
                     showMeasures(input, output);
                 } catch (Exception ex) {
-                    Logger.getLogger(CiphersController.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(SymmetricCiphersController.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         }else if("decrypt".equalsIgnoreCase(operation)){
@@ -164,7 +164,7 @@ public class CiphersController {
                     System.out.printf("\n[Execution #%d] File Succesfully Decrypted.\n", i);
                     showMeasures(input, output);
                 } catch (Exception ex) {
-                    Logger.getLogger(CiphersController.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(SymmetricCiphersController.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         }
@@ -183,7 +183,7 @@ public class CiphersController {
         try {
             chacha = new ChaCha20(mode, key);
         } catch (Exception ex) {
-            Logger.getLogger(CiphersController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(SymmetricCiphersController.class.getName()).log(Level.SEVERE, null, ex);
             return;
         }
         if("encrypt".equalsIgnoreCase(operation)){
@@ -194,7 +194,7 @@ public class CiphersController {
                 System.out.printf("\nFile Succesfully Encrypted.\n");
                 showMeasures(input, output);
             } catch (Exception ex) {
-                Logger.getLogger(CiphersController.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(SymmetricCiphersController.class.getName()).log(Level.SEVERE, null, ex);
             }
         }else if("decrypt".equalsIgnoreCase(operation)){
             try {
@@ -204,7 +204,7 @@ public class CiphersController {
                 System.out.printf("\nFile Succesfully Decrypted.\n");
                 showMeasures(input, output);
             } catch (Exception ex) {
-                Logger.getLogger(CiphersController.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(SymmetricCiphersController.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
@@ -214,7 +214,7 @@ public class CiphersController {
         try {
             chacha = new ChaCha20(mode, key);
         } catch (Exception ex) {
-            Logger.getLogger(CiphersController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(SymmetricCiphersController.class.getName()).log(Level.SEVERE, null, ex);
             return;
         }
         if("encrypt".equalsIgnoreCase(operation)){
@@ -226,7 +226,7 @@ public class CiphersController {
                     System.out.printf("\n[Execution #%d] File Succesfully Encrypted.\n", i);
                     showMeasures(input, output);
                 } catch (Exception ex) {
-                    Logger.getLogger(CiphersController.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(SymmetricCiphersController.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         }else if("decrypt".equalsIgnoreCase(operation)){
@@ -238,7 +238,7 @@ public class CiphersController {
                     System.out.printf("\n[Execution #%d] File Succesfully Decrypted.\n", i);
                     showMeasures(input, output);
                 } catch (Exception ex) {
-                    Logger.getLogger(CiphersController.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(SymmetricCiphersController.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         }

@@ -1,10 +1,7 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
-package es.uclm.esi.gsya.ciphers;
+package es.uclm.esi.gsya.ciphers.symmetric;
 
 import es.uclm.esi.gsya.utils.FileHandler;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -12,7 +9,6 @@ import java.nio.file.Files;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
 import java.security.SecureRandom;
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
@@ -22,8 +18,6 @@ import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.GCMParameterSpec;
 import javax.crypto.spec.IvParameterSpec;
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
-import java.security.Security;
 import javax.crypto.spec.SecretKeySpec;
 
 /**
@@ -32,16 +26,16 @@ import javax.crypto.spec.SecretKeySpec;
  */
 
 /*
- * Modos y Padding soportados por Camellia:
+ * Modos y Padding soportados por AES (Advanced Encryption Standard):
  *
  * Modes:
  * ECB
- *  - NoPadding
  *  - PKCS5Padding
+ *  - PKCS7Padding
  *  - ISO10126Padding
  * CBC
- *  - NoPadding
  *  - PKCS5Padding
+ *  - PKCS7Padding
  *  - ISO10126Padding
  * CFB
  *  - NoPadding
@@ -49,66 +43,64 @@ import javax.crypto.spec.SecretKeySpec;
  *  - NoPadding
  * CTR
  *  - NoPadding
- * GCM
- *  - NoPadding
- * EAX
- *  - NoPadding
- * OCB
+ * GCM (Galois/Counter Mode)
  *  - NoPadding
  *
  * Notas:
  * - ECB: Menos seguro debido a la igualdad de cifrados para bloques idénticos de texto plano.
  * - CBC: Adecuado para la mayoría de las aplicaciones que requieren seguridad mejorada respecto a ECB.
  * - CFB, OFB, CTR: Modos que permiten operar sobre flujos de datos y no requieren padding.
- * - GCM, CCM, EAX, OCB: Modos que proporcionan autenticación de mensaje junto con cifrado.
+ * - GCM: Proporciona cifrado autenticado con eficiencia y es ampliamente utilizado en protocolos de red.
  */
 
-
-public class Camellia {
+public class Aes {
     private byte[] key;
-    private String instanceString = "Camellia/";
+    private String instanceString = "AES/";
     private byte[] iv;
     private String keyFileName;
     
-    public Camellia(String mode, String padding, String keyPath) throws IOException {
-        key = FileHandler.readKeyFromFile(keyPath);
+    public Aes(String mode, String padding, String keyPath){
+        try {
+            key = FileHandler.readKeyFromFile(keyPath);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
         instanceString += mode.toUpperCase() + "/" + padding;
-
-        // Añadir BouncyCastle como proveedor de seguridad
-        Security.addProvider(new BouncyCastleProvider());
-
-        if (mode.equals("GCM") || mode.equals("OCB")){
+        if (mode.equals("GCM")){
             iv = generateIv(12);
         } else if (!mode.equals("ECB")) {
             iv = generateIv(16);
         }
     }
-
-    public Camellia(int keySize) throws NoSuchProviderException, IOException {
+    
+    public Aes(int keySize){
         key = generateKey(keySize);
-        keyFileName = "Camellia_" + keySize + ".key";
-        FileHandler.saveKeyToFile(keyFileName, key);
+        try {
+            keyFileName = "AES_"+keySize+".key";
+            FileHandler.saveKeyToFile(keyFileName, key);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
     }
     
-    private static byte[] generateKey(int keySize) throws NoSuchProviderException {
+    private static byte[] generateKey(int keySize) {
         // Verificar que el tamaño de la clave es válido
         if (keySize != 128 && keySize != 192 && keySize != 256) {
             throw new IllegalArgumentException("El tamaño de la clave debe ser 128, 192 o 256 bits.");
         }
         
         try {
-            Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
-            KeyGenerator keyGen = KeyGenerator.getInstance("Camellia", "BC");
+            KeyGenerator keyGen = KeyGenerator.getInstance("AES");
             keyGen.init(keySize);
             SecretKey secretKey = keyGen.generateKey();
             return secretKey.getEncoded();
         } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException("Error al generar la clave Camellia", e);
+            throw new RuntimeException("Error al generar la clave AES", e);
         }
     }
     
     private static byte[] generateIv(int size) {
-        byte[] iv = new byte[size]; // 12 bytes (96 bits) para GCM/OCB, 16 bytes (128 bits) para otros modos
+        byte[] iv = new byte[size]; // 12 bytes (96 bits) para GCM, 16 bytes (128 bits) para otros modos
         SecureRandom secureRandom = new SecureRandom();
         secureRandom.nextBytes(iv);
         return iv;
@@ -116,8 +108,8 @@ public class Camellia {
     
     public void encryptFile(File inputFile, File outputFile) throws Exception {
         try {
-            SecretKeySpec secretKeySpec = new SecretKeySpec(key, "Camellia");
-            Cipher cipher = Cipher.getInstance(instanceString, "BC");
+            SecretKeySpec secretKeySpec = new SecretKeySpec(key, "AES");
+            Cipher cipher = Cipher.getInstance(instanceString);
             if (instanceString.contains("GCM")) {
                 GCMParameterSpec gcmSpec = new GCMParameterSpec(128, iv); // 128 bits de tamaño del tag
                 cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec, gcmSpec);
@@ -145,8 +137,8 @@ public class Camellia {
     
     public void decryptFile(File inputFile, File outputFile) throws Exception {
         try {
-            SecretKeySpec secretKeySpec = new SecretKeySpec(key, "Camellia");
-            Cipher cipher = Cipher.getInstance(instanceString, "BC");
+            SecretKeySpec secretKeySpec = new SecretKeySpec(key, "AES");
+            Cipher cipher = Cipher.getInstance(instanceString);
 
             byte[] inputBytes = Files.readAllBytes(inputFile.toPath());
 
@@ -177,7 +169,7 @@ public class Camellia {
             throw new Exception("Error al desencriptar el archivo", e);
         }
     }
-    
+
     public String getKeyFileName() {
         return keyFileName;
     }

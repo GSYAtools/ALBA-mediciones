@@ -61,6 +61,7 @@ public class HashesController {
         
         Md5 md5 = new Md5();
         
-        md5.verifyMd5(new File(input), hash);
+        boolean res = md5.verifyMd5(new File(input), hash);
+        System.out.println("Input file matches hash: "+res);
     }
 }

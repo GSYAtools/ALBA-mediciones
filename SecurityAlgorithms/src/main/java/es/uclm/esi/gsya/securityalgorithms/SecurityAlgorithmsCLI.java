@@ -21,6 +21,7 @@ public class SecurityAlgorithmsCLI {
         options.addOption("mode", true, "Modo de operación (para cifrados de bloque)");
         options.addOption("pad", "padding", true, "Padding scheme (para cifrados de bloque)");
         options.addOption("key", true, "Ruta a la clave o tamaño de clave (para generación de claves)");
+        options.addOption("hash", true, "Ruta al fichero donde se encuentra el hash");
         options.addOption("in","input", true, "Ruta al archivo de entrada");
         options.addOption("out","output", true, "Ruta al archivo de salida");
         options.addOption("times", true, "Numero de veces que se repetirá la operación (solo encrypt o decrypt)");
@@ -36,6 +37,7 @@ public class SecurityAlgorithmsCLI {
             String mode = cmd.getOptionValue("mode");
             String padding = cmd.getOptionValue("padding");
             String keyPath = cmd.getOptionValue("key");
+            String hashPath = cmd.getOptionValue("hash");
             String inputPath = cmd.getOptionValue("input");
             String outputPath = cmd.getOptionValue("output");
             String times = cmd.getOptionValue("times");
@@ -81,7 +83,13 @@ public class SecurityAlgorithmsCLI {
                             SymmetricCiphersController.runChaCha20(operation, algorithm+"-"+mode, keyPath, inputPath, outputPath, Integer.parseInt(times));
                     }
                 }
-            } else {
+            } else if("md5".equalsIgnoreCase(algorithm)){
+                if("resume".equalsIgnoreCase(operation)){
+                    HashesController.runMd5(inputPath);
+                }else if("verify".equalsIgnoreCase(operation)){
+                    HashesController.runMd5(inputPath, hashPath);
+                }
+            }else {
                 formatter.printHelp("SecurityAlgorithms", options);
             }
 

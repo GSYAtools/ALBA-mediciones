@@ -4,6 +4,11 @@
 
 package es.uclm.esi.gsya.securityalgorithms;
 
+import java.io.FileNotFoundException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.apache.commons.cli.*;
 
 /**
@@ -90,10 +95,11 @@ public class SecurityAlgorithmsCLI {
                     HashesController.runMd5(inputPath, hashPath);
                 }
             }else if("sha-1".equalsIgnoreCase(algorithm)){
-                if("resume".equalsIgnoreCase(operation)){
-                    HashesController.runMd5(inputPath);
-                }else if("verify".equalsIgnoreCase(operation)){
-                    HashesController.runMd5(inputPath, hashPath);
+                try {
+                    startSHA_1(operation, inputPath, keyPath);
+                } catch (UnsupportedOperationException | FileNotFoundException ex) {
+                    Logger.getLogger(SecurityAlgorithmsCLI.class.getName()).log(Level.SEVERE, null, ex);
+                    System.out.println(ex.getMessage());
                 }
             }else if("sha-2".equalsIgnoreCase(algorithm)){
                 if("resume".equalsIgnoreCase(operation)){
@@ -118,11 +124,12 @@ public class SecurityAlgorithmsCLI {
         }
     }
     
-    private static void startSHA_1(String operation, String input, String key){
+    private static void startSHA_1(String operation, String input, String key) throws UnsupportedOperationException, FileNotFoundException{
+        if(input==null || !Files.exists(Paths.get(input))) {throw new FileNotFoundException("Input file \""+input+"\" could not be found");}
         if("resume".equalsIgnoreCase(operation)){
             
         }else if("verify".equalsIgnoreCase(operation)){
-            
+            if(key==null || !Files.exists(Paths.get(key))) {throw new FileNotFoundException("Key file \""+key+"\" could not be found");}
         }else{
             throw new UnsupportedOperationException("Operation \""+operation+"\" not defined for SHA-1");
         }

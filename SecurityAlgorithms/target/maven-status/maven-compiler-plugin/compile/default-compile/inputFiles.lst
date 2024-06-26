@@ -7,3 +7,4 @@
 /home/alarcos/Documentos/GitHub/ALBA-mediciones/SecurityAlgorithms/src/main/java/es/uclm/esi/gsya/securityalgorithms/SymmetricCiphersController.java
 /home/alarcos/Documentos/GitHub/ALBA-mediciones/SecurityAlgorithms/src/main/java/es/uclm/esi/gsya/ciphers/symmetric/ChaCha20.java
 /home/alarcos/Documentos/GitHub/ALBA-mediciones/SecurityAlgorithms/src/main/java/es/uclm/esi/gsya/ciphers/symmetric/Camellia.java
+/home/alarcos/Documentos/GitHub/ALBA-mediciones/SecurityAlgorithms/src/main/java/es/uclm/esi/gsya/hashes/Sha.java

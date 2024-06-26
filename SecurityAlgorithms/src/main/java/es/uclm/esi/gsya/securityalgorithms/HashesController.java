@@ -76,34 +76,6 @@ public class HashesController {
         System.out.println("Input file matches hash: "+res);
     }
     
-    public static void runMd5(String input, int times){
-        String hashFileName = "md5.txt";
-        //Obtengo la instancia
-        Md5 md5 = new Md5();
-        
-        //Genero el resumen
-        for(int i=1; i<=times; i++){
-            Measure.startCPUMeasurement();
-            String hash = md5.generateMd5(new File(input));
-            Measure.stopCPUMeasurement();
-
-            try {
-                FileHandler.saveTextToFile(hashFileName, hash);
-                System.out.printf("[#%d] MD5 hash saved into: %s\n",i,hashFileName);
-            } catch (IOException ex) {
-                Logger.getLogger(HashesController.class.getName()).log(Level.SEVERE, null, ex);
-                System.out.println("Could not save MD5 hash to file.");
-            }
-
-            try {
-                showMeasures(input, hashFileName);
-            } catch (IOException ex) {
-                Logger.getLogger(HashesController.class.getName()).log(Level.SEVERE, null, ex);
-                System.out.println("Could not read files to show measures");
-            }
-        }
-    }
-    
     public static void runSHA_1(String input) throws NoSuchAlgorithmException, IOException{
         String hashFileName = "sha_1.txt";
         //Obtengo la instancia
@@ -137,7 +109,7 @@ public class HashesController {
             hash = FileHandler.readTextFromFile(hashFile);
         } catch (IOException ex) {
             Logger.getLogger(HashesController.class.getName()).log(Level.SEVERE, null, ex);
-            System.out.println("Could not read MD5 hash from file.");
+            System.out.println("Could not read SHA-1 hash from file.");
             return;
         }
         
@@ -191,7 +163,7 @@ public class HashesController {
             hash = FileHandler.readTextFromFile(hashFile);
         } catch (IOException ex) {
             Logger.getLogger(HashesController.class.getName()).log(Level.SEVERE, null, ex);
-            System.out.println("Could not read MD5 hash from file.");
+            System.out.println("Could not read SHA-2 hash from file.");
             return;
         }
         
@@ -203,6 +175,68 @@ public class HashesController {
             }
             case 512 -> {
                 res = sha.verifySha(input, hash, "SHA-512");
+            }
+        }
+        
+        System.out.println("Input file matches hash: "+res);
+    }
+
+    static void runSHA_3(String input, int mode) throws IOException {
+        String hashFileName = "sha_3.txt";
+        //Obtengo la instancia
+        Sha sha = new Sha();
+        
+        //Genero el resumen
+        String hash = null;
+        switch(mode){
+            case 256 -> {
+                Measure.startCPUMeasurement();
+                hash = sha.resumeSHA3_256(input);
+                Measure.stopCPUMeasurement();
+            }
+            case 512 -> {
+                Measure.startCPUMeasurement();
+                hash = sha.resumeSHA3_512(input);
+                Measure.stopCPUMeasurement();
+            }
+        }
+        
+        
+        try {
+            FileHandler.saveTextToFile(hashFileName, hash);
+            System.out.println("SHA-3 hash saved into: "+hashFileName);
+        } catch (IOException ex) {
+            Logger.getLogger(HashesController.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Could not save SHA-3 hash to file.");
+        }
+        
+        try {
+            showMeasures(input, hashFileName);
+        } catch (IOException ex) {
+            Logger.getLogger(HashesController.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Could not read files to show measures");
+        }
+    }
+
+    static void runSHA_3(String input, int mode, String hashFile) throws NoSuchAlgorithmException, IOException {
+        String hash;
+        try {
+            //Método para verificar
+            hash = FileHandler.readTextFromFile(hashFile);
+        } catch (IOException ex) {
+            Logger.getLogger(HashesController.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Could not read SHA-3 hash from file.");
+            return;
+        }
+        
+        Sha sha = new Sha();
+        boolean res = false;
+        switch(mode){
+            case 256 -> {
+                res = sha.verifySha(input, hash, "SHA-3-256");
+            }
+            case 512 -> {
+                res = sha.verifySha(input, hash, "SHA-3-512");
             }
         }
         

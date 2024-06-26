@@ -63,35 +63,6 @@ public class SymmetricCiphersController {
         }
     }
     
-    public static void runAes(String operation, String mode, String padding, String key, String input, String output, int times) {
-        Aes aes = new Aes(mode, padding, key);
-        if("encrypt".equalsIgnoreCase(operation)){
-            for(int i=1; i<=times;i++) {
-                try {
-                    Measure.startCPUMeasurement();
-                    aes.encryptFile(new File(input), new File(output));
-                    Measure.stopCPUMeasurement();
-                    System.out.printf("\n[Execution #%d] File Succesfully Encrypted.\n", i);
-                    showMeasures(input, output);
-                } catch (Exception ex) {
-                    Logger.getLogger(SymmetricCiphersController.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-        }else if("decrypt".equalsIgnoreCase(operation)){
-            for(int i=1; i<=times;i++) {
-                try {
-                    Measure.startCPUMeasurement();
-                    aes.decryptFile(new File(input), new File(output));
-                    Measure.stopCPUMeasurement();
-                    System.out.printf("\n[Execution #%d] File Succesfully Decrypted.\n", i);
-                    showMeasures(input, output);
-                } catch (Exception ex) {
-                    Logger.getLogger(SymmetricCiphersController.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-        }
-    }
-    
     /*
     MÉTODOS PARA LA EJECUCIÓN DE CAMELLIA
     */
@@ -135,41 +106,6 @@ public class SymmetricCiphersController {
         }
     }
     
-    public static void runCamellia(String operation, String mode, String padding, String key, String input, String output, int times) {
-        Camellia camellia;
-        try {
-            camellia = new Camellia(mode, padding, key);
-        } catch (IOException ex) {
-            Logger.getLogger(SymmetricCiphersController.class.getName()).log(Level.SEVERE, null, ex);
-            return;
-        }
-        if("encrypt".equalsIgnoreCase(operation)){
-            for(int i=1; i<=times;i++) {
-                try {
-                    Measure.startCPUMeasurement();
-                    camellia.encryptFile(new File(input), new File(output));
-                    Measure.stopCPUMeasurement();
-                    System.out.printf("\n[Execution #%d] File Succesfully Encrypted.\n", i);
-                    showMeasures(input, output);
-                } catch (Exception ex) {
-                    Logger.getLogger(SymmetricCiphersController.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-        }else if("decrypt".equalsIgnoreCase(operation)){
-            for(int i=1; i<=times;i++) {
-                try {
-                    Measure.startCPUMeasurement();
-                    camellia.decryptFile(new File(input), new File(output));
-                    Measure.stopCPUMeasurement();
-                    System.out.printf("\n[Execution #%d] File Succesfully Decrypted.\n", i);
-                    showMeasures(input, output);
-                } catch (Exception ex) {
-                    Logger.getLogger(SymmetricCiphersController.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-        }
-    }
-    
     /*
     MÉTODOS PARA LA EJECUCIÓN DE CHACHA20
     */
@@ -209,38 +145,4 @@ public class SymmetricCiphersController {
         }
     }
     
-    public static void runChaCha20(String operation, String mode, String key, String input, String output, int times) {
-        ChaCha20 chacha;
-        try {
-            chacha = new ChaCha20(mode, key);
-        } catch (Exception ex) {
-            Logger.getLogger(SymmetricCiphersController.class.getName()).log(Level.SEVERE, null, ex);
-            return;
-        }
-        if("encrypt".equalsIgnoreCase(operation)){
-            for(int i=1; i<=times;i++) {
-                try {
-                    Measure.startCPUMeasurement();
-                    chacha.encryptFile(new File(input), new File(output));
-                    Measure.stopCPUMeasurement();
-                    System.out.printf("\n[Execution #%d] File Succesfully Encrypted.\n", i);
-                    showMeasures(input, output);
-                } catch (Exception ex) {
-                    Logger.getLogger(SymmetricCiphersController.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-        }else if("decrypt".equalsIgnoreCase(operation)){
-            for(int i=1; i<=times;i++) {
-                try {
-                    Measure.startCPUMeasurement();
-                    chacha.decryptFile(new File(input), new File(output));
-                    Measure.stopCPUMeasurement();
-                    System.out.printf("\n[Execution #%d] File Succesfully Decrypted.\n", i);
-                    showMeasures(input, output);
-                } catch (Exception ex) {
-                    Logger.getLogger(SymmetricCiphersController.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-        }
-    }
 }

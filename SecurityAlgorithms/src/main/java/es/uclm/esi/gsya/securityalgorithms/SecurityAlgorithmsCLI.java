@@ -5,8 +5,10 @@
 package es.uclm.esi.gsya.securityalgorithms;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.security.NoSuchAlgorithmException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.commons.cli.*;
@@ -94,20 +96,20 @@ public class SecurityAlgorithmsCLI {
                 }else if("verify".equalsIgnoreCase(operation)){
                     HashesController.runMd5(inputPath, hashPath);
                 }
-            }else if("sha1".equalsIgnoreCase(algorithm)){
+            }else if("sha-1".equalsIgnoreCase(algorithm)){
                 try {
                     startSHA_1(operation, inputPath, keyPath);
-                } catch (UnsupportedOperationException | FileNotFoundException ex) {
+                } catch (UnsupportedOperationException | NoSuchAlgorithmException | IOException ex) {
                     Logger.getLogger(SecurityAlgorithmsCLI.class.getName()).log(Level.SEVERE, null, ex);
                     System.out.println(ex.getMessage());
                 }
-            }else if("sha2".equalsIgnoreCase(algorithm)){
+            }else if("sha-2".equalsIgnoreCase(algorithm)){
                 if("resume".equalsIgnoreCase(operation)){
                     HashesController.runMd5(inputPath);
                 }else if("verify".equalsIgnoreCase(operation)){
                     HashesController.runMd5(inputPath, hashPath);
                 }
-            }else if("sha3".equalsIgnoreCase(algorithm)){
+            }else if("sha-3".equalsIgnoreCase(algorithm)){
                 if("resume".equalsIgnoreCase(operation)){
                     HashesController.runMd5(inputPath);
                 }else if("verify".equalsIgnoreCase(operation)){
@@ -124,12 +126,13 @@ public class SecurityAlgorithmsCLI {
         }
     }
     
-    private static void startSHA_1(String operation, String input, String key) throws UnsupportedOperationException, FileNotFoundException{
+    private static void startSHA_1(String operation, String input, String key) throws UnsupportedOperationException, FileNotFoundException, NoSuchAlgorithmException, IOException{
         if(input==null || !Files.exists(Paths.get(input))) {throw new FileNotFoundException("Input file \""+input+"\" could not be found");}
         if("resume".equalsIgnoreCase(operation)){
-            
+            HashesController.runSHA_1(input);
         }else if("verify".equalsIgnoreCase(operation)){
             if(key==null || !Files.exists(Paths.get(key))) {throw new FileNotFoundException("Key file \""+key+"\" could not be found");}
+            HashesController.runSHA_1(input, key);
         }else{
             throw new UnsupportedOperationException("Operation \""+operation+"\" not defined for SHA-1");
         }

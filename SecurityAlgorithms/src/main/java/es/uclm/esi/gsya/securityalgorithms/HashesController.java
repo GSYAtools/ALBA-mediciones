@@ -146,4 +146,66 @@ public class HashesController {
         boolean res = sha.verifySha(input, hash, "SHA-1");
         System.out.println("Input file matches hash: "+res);
     }
+
+    static void runSHA_2(String input, int mode) throws NoSuchAlgorithmException, IOException {
+        String hashFileName = "sha_2.txt";
+        //Obtengo la instancia
+        Sha sha = new Sha();
+        
+        //Genero el resumen
+        String hash = null;
+        switch(mode){
+            case 256 -> {
+                Measure.startCPUMeasurement();
+                hash = sha.resumeSHA256(input);
+                Measure.stopCPUMeasurement();
+            }
+            case 512 -> {
+                Measure.startCPUMeasurement();
+                hash = sha.resumeSHA512(input);
+                Measure.stopCPUMeasurement();
+            }
+        }
+        
+        
+        try {
+            FileHandler.saveTextToFile(hashFileName, hash);
+            System.out.println("SHA-2 hash saved into: "+hashFileName);
+        } catch (IOException ex) {
+            Logger.getLogger(HashesController.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Could not save SHA-2 hash to file.");
+        }
+        
+        try {
+            showMeasures(input, hashFileName);
+        } catch (IOException ex) {
+            Logger.getLogger(HashesController.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Could not read files to show measures");
+        }
+    }
+
+    static void runSHA_2(String input, int mode, String hashFile) throws NoSuchAlgorithmException, IOException {
+        String hash;
+        try {
+            //Método para verificar
+            hash = FileHandler.readTextFromFile(hashFile);
+        } catch (IOException ex) {
+            Logger.getLogger(HashesController.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Could not read MD5 hash from file.");
+            return;
+        }
+        
+        Sha sha = new Sha();
+        boolean res = false;
+        switch(mode){
+            case 256 -> {
+                res = sha.verifySha(input, hash, "SHA-256");
+            }
+            case 512 -> {
+                res = sha.verifySha(input, hash, "SHA-512");
+            }
+        }
+        
+        System.out.println("Input file matches hash: "+res);
+    }
 }

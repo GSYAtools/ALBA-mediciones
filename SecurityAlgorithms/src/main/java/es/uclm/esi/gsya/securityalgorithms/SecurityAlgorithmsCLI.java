@@ -104,10 +104,11 @@ public class SecurityAlgorithmsCLI {
                     System.out.println(ex.getMessage());
                 }
             }else if("sha-2".equalsIgnoreCase(algorithm)){
-                if("resume".equalsIgnoreCase(operation)){
-                    HashesController.runMd5(inputPath);
-                }else if("verify".equalsIgnoreCase(operation)){
-                    HashesController.runMd5(inputPath, hashPath);
+                try {
+                    startSHA_2(operation, inputPath, mode, keyPath);
+                } catch (UnsupportedOperationException | NoSuchAlgorithmException | IOException | MissingArgumentException ex) {
+                    Logger.getLogger(SecurityAlgorithmsCLI.class.getName()).log(Level.SEVERE, null, ex);
+                    System.out.println(ex.getMessage());
                 }
             }else if("sha-3".equalsIgnoreCase(algorithm)){
                 if("resume".equalsIgnoreCase(operation)){
@@ -116,12 +117,12 @@ public class SecurityAlgorithmsCLI {
                     HashesController.runMd5(inputPath, hashPath);
                 }
             }else {
-                formatter.printHelp("SecurityAlgorithms", options);
+                formatter.printHelp("java -jar SecurityAlgorithms.jar", options);
             }
 
         } catch (ParseException e) {
             System.out.println(e.getMessage());
-            formatter.printHelp("SecurityAlgorithms", options);
+            formatter.printHelp("java -jar SecurityAlgorithms.jar", options);
             System.exit(1);
         }
     }
@@ -138,4 +139,20 @@ public class SecurityAlgorithmsCLI {
         }
     }
     
+    private static void startSHA_2(String operation, String input, String mode, String key) throws UnsupportedOperationException, FileNotFoundException, NoSuchAlgorithmException, IOException, MissingArgumentException{
+        if(input==null || !Files.exists(Paths.get(input))) {throw new FileNotFoundException("Input file \""+input+"\" could not be found");}
+        if(mode==null || (!mode.equals("256") && !mode.equals("512"))) {throw new MissingArgumentException("Argument \"-mode\" must be 256 or 512");}
+        if("resume".equalsIgnoreCase(operation)){
+            HashesController.runSHA_2(input, Integer.parseInt(mode));
+        }else if("verify".equalsIgnoreCase(operation)){
+            if(key==null || !Files.exists(Paths.get(key))) {throw new FileNotFoundException("Key file \""+key+"\" could not be found");}
+            HashesController.runSHA_2(input, Integer.parseInt(mode), key);
+        }else{
+            throw new UnsupportedOperationException("Operation \""+operation+"\" not defined for SHA-1");
+        }
+    }
+    
+    private static void startSHA_3(){
+        
+    }
 }

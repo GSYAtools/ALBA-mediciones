@@ -66,7 +66,7 @@ public class SymmetricCiphersController {
     public static void runAes(String operation, String mode, String padding, String key, String input, String output, int times) {
         Aes aes = new Aes(mode, padding, key);
         if("encrypt".equalsIgnoreCase(operation)){
-            for(int i=0; i<times;i++) {
+            for(int i=1; i<=times;i++) {
                 try {
                     Measure.startCPUMeasurement();
                     aes.encryptFile(new File(input), new File(output));
@@ -78,7 +78,7 @@ public class SymmetricCiphersController {
                 }
             }
         }else if("decrypt".equalsIgnoreCase(operation)){
-            for(int i=0; i<times;i++) {
+            for(int i=1; i<=times;i++) {
                 try {
                     Measure.startCPUMeasurement();
                     aes.decryptFile(new File(input), new File(output));
@@ -144,7 +144,7 @@ public class SymmetricCiphersController {
             return;
         }
         if("encrypt".equalsIgnoreCase(operation)){
-            for(int i=0; i<times;i++) {
+            for(int i=1; i<=times;i++) {
                 try {
                     Measure.startCPUMeasurement();
                     camellia.encryptFile(new File(input), new File(output));
@@ -156,7 +156,7 @@ public class SymmetricCiphersController {
                 }
             }
         }else if("decrypt".equalsIgnoreCase(operation)){
-            for(int i=0; i<times;i++) {
+            for(int i=1; i<=times;i++) {
                 try {
                     Measure.startCPUMeasurement();
                     camellia.decryptFile(new File(input), new File(output));
@@ -218,7 +218,7 @@ public class SymmetricCiphersController {
             return;
         }
         if("encrypt".equalsIgnoreCase(operation)){
-            for(int i=0; i<times;i++) {
+            for(int i=1; i<=times;i++) {
                 try {
                     Measure.startCPUMeasurement();
                     chacha.encryptFile(new File(input), new File(output));
@@ -230,7 +230,7 @@ public class SymmetricCiphersController {
                 }
             }
         }else if("decrypt".equalsIgnoreCase(operation)){
-            for(int i=0; i<times;i++) {
+            for(int i=1; i<=times;i++) {
                 try {
                     Measure.startCPUMeasurement();
                     chacha.decryptFile(new File(input), new File(output));

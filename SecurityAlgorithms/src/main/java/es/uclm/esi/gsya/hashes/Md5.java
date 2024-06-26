@@ -8,7 +8,7 @@ import java.security.NoSuchAlgorithmException;
 
 /**
  *
- * @author alarcos
+ * @author Eugenio
  */
 public class Md5 {
     private MessageDigest md;

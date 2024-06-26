@@ -89,6 +89,24 @@ public class SecurityAlgorithmsCLI {
                 }else if("verify".equalsIgnoreCase(operation)){
                     HashesController.runMd5(inputPath, hashPath);
                 }
+            }else if("sha-1".equalsIgnoreCase(algorithm)){
+                if("resume".equalsIgnoreCase(operation)){
+                    HashesController.runMd5(inputPath);
+                }else if("verify".equalsIgnoreCase(operation)){
+                    HashesController.runMd5(inputPath, hashPath);
+                }
+            }else if("sha-2".equalsIgnoreCase(algorithm)){
+                if("resume".equalsIgnoreCase(operation)){
+                    HashesController.runMd5(inputPath);
+                }else if("verify".equalsIgnoreCase(operation)){
+                    HashesController.runMd5(inputPath, hashPath);
+                }
+            }else if("sha-3".equalsIgnoreCase(algorithm)){
+                if("resume".equalsIgnoreCase(operation)){
+                    HashesController.runMd5(inputPath);
+                }else if("verify".equalsIgnoreCase(operation)){
+                    HashesController.runMd5(inputPath, hashPath);
+                }
             }else {
                 formatter.printHelp("SecurityAlgorithms", options);
             }
@@ -97,6 +115,16 @@ public class SecurityAlgorithmsCLI {
             System.out.println(e.getMessage());
             formatter.printHelp("SecurityAlgorithms", options);
             System.exit(1);
+        }
+    }
+    
+    private static void startSHA_1(String operation, String input, String key){
+        if("resume".equalsIgnoreCase(operation)){
+            
+        }else if("verify".equalsIgnoreCase(operation)){
+            
+        }else{
+            throw new UnsupportedOperationException("Operation \""+operation+"\" not defined for SHA-1");
         }
     }
     

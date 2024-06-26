@@ -27,7 +27,7 @@ public class SymmetricCiphersController {
         System.out.printf("Input File size: %d bytes\n", fi);
         System.out.printf("Output File Size: %d bytes\n", fo);
         System.out.printf("Compression Percentage: %d %%\n", cp);
-        System.out.printf("Execution Time: %d ns (%d ms)\n", Measure.getLastCpuTimeMeasure(), Measure.getLastCpuTimeMeasure()/1000000);
+        System.out.printf("Execution Time: %d ns (%d ms)\n\n", Measure.getLastCpuTimeMeasure(), Measure.getLastCpuTimeMeasure()/1000000);
     }
     
     /*

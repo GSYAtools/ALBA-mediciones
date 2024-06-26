@@ -94,20 +94,20 @@ public class SecurityAlgorithmsCLI {
                 }else if("verify".equalsIgnoreCase(operation)){
                     HashesController.runMd5(inputPath, hashPath);
                 }
-            }else if("sha-1".equalsIgnoreCase(algorithm)){
+            }else if("sha1".equalsIgnoreCase(algorithm)){
                 try {
                     startSHA_1(operation, inputPath, keyPath);
                 } catch (UnsupportedOperationException | FileNotFoundException ex) {
                     Logger.getLogger(SecurityAlgorithmsCLI.class.getName()).log(Level.SEVERE, null, ex);
                     System.out.println(ex.getMessage());
                 }
-            }else if("sha-2".equalsIgnoreCase(algorithm)){
+            }else if("sha2".equalsIgnoreCase(algorithm)){
                 if("resume".equalsIgnoreCase(operation)){
                     HashesController.runMd5(inputPath);
                 }else if("verify".equalsIgnoreCase(operation)){
                     HashesController.runMd5(inputPath, hashPath);
                 }
-            }else if("sha-3".equalsIgnoreCase(algorithm)){
+            }else if("sha3".equalsIgnoreCase(algorithm)){
                 if("resume".equalsIgnoreCase(operation)){
                     HashesController.runMd5(inputPath);
                 }else if("verify".equalsIgnoreCase(operation)){

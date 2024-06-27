@@ -1,9 +1,13 @@
 package es.uclm.esi.gsya.ciphers.symmetric;
 
+import static es.uclm.esi.gsya.securityalgorithms.OptionValues.*;
 import es.uclm.esi.gsya.utils.FileHandler;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.file.Files;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
@@ -25,130 +29,103 @@ import javax.crypto.spec.SecretKeySpec;
  * Clase para cifrado y descifrado usando ChaCha20 y ChaCha20-Poly1305.
  */
 public class ChaCha20 {
-    private byte[] key;
+    private final String keyFileName = "ChaCha20.key";
+    private final String nonceFileName = "ChaCha20.nonce";
+    public static final int NONCE_SIZE = 12; // Tamaño estándar para ChaCha20-Poly1305 (otros tamaños 8 y 16)
+    private static final int TAG_SIZE_BITS = 128; // Tamaño estándar del TAG para ChaCha20-Poly1305
+    private static final int KEY_SIZE = 256;
+    private static final int BUFFER_SIZE = 4096; // Tamaño del buffer para leer/escribir archivos
+    private SecretKey key;
     private byte[] nonce;
-    private String instanceString;
-    private String keyFileName;
-
-    // Bloque estático para registrar Bouncy Castle
-    static {
-        Security.addProvider(new BouncyCastleProvider());
+    
+    //Constructor para generar clave y nonce
+    public ChaCha20(String algorithm, int nonceSize) throws IOException, NoSuchAlgorithmException{
+        generateKey(algorithm);
+        generateNonce(nonceSize);
+    }
+    
+    //Contructor para encriptar y desencriptar
+    public ChaCha20(String keyPath, String noncePath, String algorithm) throws IOException{
+        byte[] keyBytes = FileHandler.readKeyFromFile(keyPath);
+        key = new SecretKeySpec(keyBytes, algorithm);
+        nonce = FileHandler.readKeyFromFile(noncePath);
+    }
+    // Genera una clave de ChaCha20
+    private void generateKey(String algorithm) throws NoSuchAlgorithmException, IOException {
+        KeyGenerator keyGen = KeyGenerator.getInstance(algorithm);
+        keyGen.init(KEY_SIZE);
+        byte[] key = keyGen.generateKey().getEncoded();
+        FileHandler.saveKeyToFile(keyFileName, key);
     }
 
-    // Constructor cuando se proporciona un modo y la clave desde un archivo
-    public ChaCha20(String mode, String keyPath) throws Exception {
-        try {
-            key = FileHandler.readKeyFromFile(keyPath);
-            setupMode(mode);
-        } catch (IOException ex) {
-            throw new Exception("Error al leer la clave desde el archivo", ex);
-        }
-    }
-
-    // Constructor para generar una nueva clave y guardarla en un archivo
-    public ChaCha20() {
-        key = generateKey();
-        try {
-            keyFileName = "ChaCha20.key";
-            FileHandler.saveKeyToFile(keyFileName, key);
-            setupMode("ChaCha20"); // Valor por defecto
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    // Configuración del modo de cifrado
-    private void setupMode(String mode) {
-        switch (mode) {
-            case "Poly1305" -> {
-                this.instanceString = "ChaCha20-Poly1305";
-                this.nonce = generateNonce(12); // 12 bytes para ChaCha20
-            }
-            default -> {
-                this.instanceString = "ChaCha20";
-                this.nonce = generateNonce(12); // 12 bytes para ChaCha20
-            }
-        }
-    }
-
-    // Generación de una nueva clave ChaCha20 de 256 bits
-    private static byte[] generateKey() {
-        try {
-            KeyGenerator keyGen = KeyGenerator.getInstance("ChaCha20");
-            keyGen.init(256); // ChaCha20 utiliza claves de 256 bits
-            SecretKey secretKey = keyGen.generateKey();
-            return secretKey.getEncoded();
-        } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException("Error al generar la clave ChaCha20", e);
-        }
-    }
-
-    // Generación de un nonce de tamaño especificado
-    private static byte[] generateNonce(int size) {
+    // Genera un nonce (número aleatorio utilizado una sola vez)
+    private void generateNonce(int size) throws IOException {
         byte[] nonce = new byte[size];
-        SecureRandom secureRandom = new SecureRandom();
-        secureRandom.nextBytes(nonce);
-        return nonce;
+        new SecureRandom().nextBytes(nonce);
+        FileHandler.saveKeyToFile(nonceFileName, nonce);
     }
 
-    // Método para cifrar un archivo
-    public void encryptFile(File inputFile, File outputFile) throws Exception {
-        try {
-            SecretKeySpec secretKeySpec = new SecretKeySpec(key, "ChaCha20");
-            Cipher cipher = Cipher.getInstance(instanceString, "BC");
+    // Encripta datos usando ChaCha20
+    public void encryptFileChaCha20(File inputFile, File outputFile) throws Exception {
+        Cipher cipher = Cipher.getInstance(ALG_CHACHA20);
+        ChaCha20ParameterSpec paramSpec = new ChaCha20ParameterSpec(nonce, 1);
+        cipher.init(Cipher.ENCRYPT_MODE, key, paramSpec);
 
-            if (instanceString.equals("ChaCha20-Poly1305")) {
-                GCMParameterSpec paramSpec = new GCMParameterSpec(128, nonce);
-                cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec, paramSpec);
+        processFile(cipher, inputFile, outputFile);
+    }
+
+    // Desencripta un archivo completo usando ChaCha20
+    public void decryptFileChaCha20(File inputFile, File outputFile) throws Exception {
+        Cipher cipher = Cipher.getInstance(ALG_CHACHA20);
+        ChaCha20ParameterSpec paramSpec = new ChaCha20ParameterSpec(nonce, 1);
+        cipher.init(Cipher.DECRYPT_MODE, key, paramSpec);
+
+        processFile(cipher, inputFile, outputFile);
+    }
+
+    // Encripta un archivo completo usando ChaCha20-Poly1305
+    public void encryptFileChaCha20Poly1305(File inputFile, File outputFile) throws Exception {
+        Cipher cipher = Cipher.getInstance(ALG_CHACHA20_POLY1305);
+        GCMParameterSpec gcmSpec = new GCMParameterSpec(TAG_SIZE_BITS, nonce);
+        cipher.init(Cipher.ENCRYPT_MODE, key, gcmSpec);
+
+        processFile(cipher, inputFile, outputFile);
+    }
+
+    // Desencripta un archivo completo usando ChaCha20-Poly1305
+    public void decryptFileChaCha20Poly1305(File inputFile, File outputFile) throws Exception {
+        Cipher cipher = Cipher.getInstance(ALG_CHACHA20_POLY1305);
+        GCMParameterSpec gcmSpec = new GCMParameterSpec(TAG_SIZE_BITS, nonce);
+        cipher.init(Cipher.DECRYPT_MODE, key, gcmSpec);
+
+        processFile(cipher, inputFile, outputFile);
+    }
+
+    // Procesa el archivo (cifra o descifra) usando el cifrador
+    private void processFile(Cipher cipher, File inputFile, File outputFile) throws Exception {
+        try (InputStream in = new FileInputStream(inputFile);
+             OutputStream out = new FileOutputStream(outputFile)) {
+            byte[] buffer = new byte[BUFFER_SIZE];
+            int bytesRead;
+
+            while ((bytesRead = in.read(buffer)) != -1) {
+                byte[] output = cipher.update(buffer, 0, bytesRead);
+                if (output != null) {
+                    out.write(output);
+                }
             }
-
-            byte[] inputBytes = Files.readAllBytes(inputFile.toPath());
-            byte[] outputBytes = cipher.doFinal(inputBytes);
-
-            try (FileOutputStream outputStream = new FileOutputStream(outputFile)) {
-                // Escribir el nonce al principio del archivo
-                outputStream.write(nonce);
-                outputStream.write(outputBytes);
+            byte[] outputBytes = cipher.doFinal();
+            if (outputBytes != null) {
+                out.write(outputBytes);
             }
-        } catch (IOException | InvalidAlgorithmParameterException | InvalidKeyException |
-                 NoSuchAlgorithmException | BadPaddingException | IllegalBlockSizeException |
-                 NoSuchPaddingException e) {
-            throw new Exception("Error al encriptar el archivo", e);
         }
     }
-
-    // Método para descifrar un archivo
-    public void decryptFile(File inputFile, File outputFile) throws Exception {
-        try {
-            SecretKeySpec secretKeySpec = new SecretKeySpec(key, "ChaCha20");
-            Cipher cipher = Cipher.getInstance(instanceString, "BC");
-
-            byte[] inputBytes = Files.readAllBytes(inputFile.toPath());
-
-            // Extraer el nonce del archivo cifrado
-            byte[] nonceFromFile = new byte[nonce.length];
-            System.arraycopy(inputBytes, 0, nonceFromFile, 0, nonceFromFile.length);
-            byte[] actualCipherText = new byte[inputBytes.length - nonceFromFile.length];
-            System.arraycopy(inputBytes, nonceFromFile.length, actualCipherText, 0, actualCipherText.length);
-
-            if (instanceString.equals("ChaCha20-Poly1305")) {
-                GCMParameterSpec paramSpec = new GCMParameterSpec(128, nonceFromFile);
-                cipher.init(Cipher.DECRYPT_MODE, secretKeySpec, paramSpec);
-            }
-
-            byte[] outputBytes = cipher.doFinal(actualCipherText);
-
-            try (FileOutputStream outputStream = new FileOutputStream(outputFile)) {
-                outputStream.write(outputBytes);
-            }
-        } catch (IOException | InvalidAlgorithmParameterException | InvalidKeyException |
-                 NoSuchAlgorithmException | BadPaddingException | IllegalBlockSizeException |
-                 NoSuchPaddingException e) {
-            throw new Exception("Error al desencriptar el archivo", e);
-        }
-    }
-
+    
     public String getKeyFileName() {
         return keyFileName;
+    }
+    
+    public String getNonceFileName() {
+        return nonceFileName;
     }
 }

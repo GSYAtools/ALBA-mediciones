@@ -7,9 +7,11 @@ package es.uclm.esi.gsya.securityalgorithms;
 import es.uclm.esi.gsya.ciphers.symmetric.Aes;
 import es.uclm.esi.gsya.ciphers.symmetric.Camellia;
 import es.uclm.esi.gsya.ciphers.symmetric.ChaCha20;
+import static es.uclm.esi.gsya.securityalgorithms.OptionValues.*;
 import es.uclm.esi.gsya.utils.Measure;
 import java.io.File;
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -40,7 +42,7 @@ public class SymmetricCiphersController {
     
     public static void runAes(String operation, String mode, String padding, String key, String input, String output) {
         Aes aes = new Aes(mode, padding, key);
-        if("encrypt".equalsIgnoreCase(operation)){
+        if(OP_ENCRYPT.equalsIgnoreCase(operation)){
             try {
                 Measure.startCPUMeasurement();
                 aes.encryptFile(new File(input), new File(output));
@@ -50,7 +52,7 @@ public class SymmetricCiphersController {
             } catch (Exception ex) {
                 Logger.getLogger(SymmetricCiphersController.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }else if("decrypt".equalsIgnoreCase(operation)){
+        }else if(OP_DECRYPT.equalsIgnoreCase(operation)){
             try {
                 Measure.startCPUMeasurement();
                 aes.decryptFile(new File(input), new File(output));
@@ -83,7 +85,7 @@ public class SymmetricCiphersController {
             Logger.getLogger(SymmetricCiphersController.class.getName()).log(Level.SEVERE, null, ex);
             return;
         }
-        if("encrypt".equalsIgnoreCase(operation)){
+        if(OP_ENCRYPT.equalsIgnoreCase(operation)){
             try {
                 Measure.startCPUMeasurement();
                 camellia.encryptFile(new File(input), new File(output));
@@ -93,7 +95,7 @@ public class SymmetricCiphersController {
             } catch (Exception ex) {
                 Logger.getLogger(SymmetricCiphersController.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }else if("decrypt".equalsIgnoreCase(operation)){
+        }else if(OP_DECRYPT.equalsIgnoreCase(operation)){
             try {
                 Measure.startCPUMeasurement();
                 camellia.decryptFile(new File(input), new File(output));
@@ -109,39 +111,27 @@ public class SymmetricCiphersController {
     /*
     MÉTODOS PARA LA EJECUCIÓN DE CHACHA20
     */
-    public static void runChaCha20(){
-        ChaCha20 chacha = new ChaCha20();
+    public static void runChaCha20(String algorithm) throws NoSuchAlgorithmException, IOException{
+        ChaCha20 chacha = new ChaCha20(algorithm, ChaCha20.NONCE_SIZE);
         System.out.printf("\nKey File Successfully Generated with name: %s\n", chacha.getKeyFileName());
+        System.out.printf("\nNonce File Successfully Generated with name: %s\n", chacha.getNonceFileName());
     }
     
-    public static void runChaCha20(String operation, String mode, String key, String input, String output) {
-        ChaCha20 chacha;
-        try {
-            chacha = new ChaCha20(mode, key);
-        } catch (Exception ex) {
-            Logger.getLogger(SymmetricCiphersController.class.getName()).log(Level.SEVERE, null, ex);
-            return;
+    public static void runChaCha20(String operation,String algorithm, String nonce, String key, String input, String output) throws Exception {
+        ChaCha20 chacha = new ChaCha20(key, nonce, algorithm);
+        if(OP_ENCRYPT.equalsIgnoreCase(operation)){
+            chacha.encryptFileChaCha20(new File(input), new File(output));
+        }else if(OP_DECRYPT.equalsIgnoreCase(operation)){
+            chacha.decryptFileChaCha20(new File(input), new File(output));
         }
-        if("encrypt".equalsIgnoreCase(operation)){
-            try {
-                Measure.startCPUMeasurement();
-                chacha.encryptFile(new File(input), new File(output));
-                Measure.stopCPUMeasurement();
-                System.out.printf("\nFile Succesfully Encrypted.\n");
-                showMeasures(input, output);
-            } catch (Exception ex) {
-                Logger.getLogger(SymmetricCiphersController.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }else if("decrypt".equalsIgnoreCase(operation)){
-            try {
-                Measure.startCPUMeasurement();
-                chacha.decryptFile(new File(input), new File(output));
-                Measure.stopCPUMeasurement();
-                System.out.printf("\nFile Succesfully Decrypted.\n");
-                showMeasures(input, output);
-            } catch (Exception ex) {
-                Logger.getLogger(SymmetricCiphersController.class.getName()).log(Level.SEVERE, null, ex);
-            }
+    }
+    
+    public static void runChaCha20_Poly1305(String operation,String algorithm, String nonce, String key, String input, String output) throws IOException, Exception {
+        ChaCha20 chacha = new ChaCha20(key, nonce, algorithm);
+        if(OP_ENCRYPT.equalsIgnoreCase(operation)){
+            chacha.encryptFileChaCha20Poly1305(new File(input), new File(output));
+        }else if(OP_DECRYPT.equalsIgnoreCase(operation)){
+            chacha.decryptFileChaCha20Poly1305(new File(input), new File(output));
         }
     }
     

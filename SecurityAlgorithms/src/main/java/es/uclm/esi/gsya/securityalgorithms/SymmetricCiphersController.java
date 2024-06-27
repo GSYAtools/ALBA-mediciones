@@ -111,8 +111,15 @@ public class SymmetricCiphersController {
     /*
     MÉTODOS PARA LA EJECUCIÓN DE CHACHA20
     */
-    public static void runChaCha20(String algorithm) throws NoSuchAlgorithmException, IOException{
-        ChaCha20 chacha = new ChaCha20(algorithm, ChaCha20.NONCE_SIZE);
+    public static void runChaCha20(String algorithm){
+        ChaCha20 chacha;
+        try {
+            chacha = new ChaCha20(algorithm, ChaCha20.NONCE_SIZE);
+        } catch (IOException | NoSuchAlgorithmException ex) {
+            Logger.getLogger(SymmetricCiphersController.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println(ex.getMessage());
+            return;
+        }
         System.out.printf("\nKey File Successfully Generated with name: %s\n", chacha.getKeyFileName());
         System.out.printf("\nNonce File Successfully Generated with name: %s\n", chacha.getNonceFileName());
     }

@@ -8,20 +8,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.nio.file.Files;
-import java.security.InvalidAlgorithmParameterException;
-import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
-import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
-import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.KeyGenerator;
-import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.ChaCha20ParameterSpec;
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
-import java.security.Security;
 import javax.crypto.spec.GCMParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
@@ -54,13 +46,13 @@ public class ChaCha20 {
     private void generateKey(String algorithm) throws NoSuchAlgorithmException, IOException {
         KeyGenerator keyGen = KeyGenerator.getInstance(algorithm);
         keyGen.init(KEY_SIZE);
-        byte[] key = keyGen.generateKey().getEncoded();
-        FileHandler.saveKeyToFile(keyFileName, key);
+        byte[] bKey = keyGen.generateKey().getEncoded();
+        FileHandler.saveKeyToFile(keyFileName, bKey);
     }
 
     // Genera un nonce (número aleatorio utilizado una sola vez)
     private void generateNonce(int size) throws IOException {
-        byte[] nonce = new byte[size];
+        nonce = new byte[size];
         new SecureRandom().nextBytes(nonce);
         FileHandler.saveKeyToFile(nonceFileName, nonce);
     }

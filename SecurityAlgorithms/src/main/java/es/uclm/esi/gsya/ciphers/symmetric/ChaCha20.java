@@ -60,9 +60,13 @@ public class ChaCha20 {
     // Configuración del modo de cifrado
     private void setupMode(String mode) {
         switch (mode) {
-            case "ChaCha20-Poly1305" -> {
+            case "Poly1305" -> {
                 this.instanceString = "ChaCha20-Poly1305";
-                this.nonce = generateNonce(12); // 12 bytes para ChaCha20-Poly1305
+                this.nonce = generateNonce(12); // 12 bytes para ChaCha20
+            }
+            default -> {
+                this.instanceString = "ChaCha20";
+                this.nonce = generateNonce(12); // 12 bytes para ChaCha20
             }
         }
     }

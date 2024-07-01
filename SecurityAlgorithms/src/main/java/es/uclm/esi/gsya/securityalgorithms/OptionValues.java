@@ -1,12 +1,9 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Interface.java to edit this template
- */
+
 package es.uclm.esi.gsya.securityalgorithms;
 
 /**
  *
- * @author alarcos
+ * @author Eugenio
  */
 public interface OptionValues {
     public static String OP_KEYGEN = "keygen";

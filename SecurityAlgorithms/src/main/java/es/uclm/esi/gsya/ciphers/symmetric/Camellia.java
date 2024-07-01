@@ -26,50 +26,38 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import java.security.Security;
 import javax.crypto.spec.SecretKeySpec;
 
+
 /**
- *
+ * Clase que proporciona métodos para cifrar y descifrar archivos utilizando el algoritmo Camellia en diferentes modos y esquemas de relleno.
+ * Permite la generación de claves aleatorias y el manejo de archivos de clave.
+ * 
+ * <p>El cifrado se puede realizar en modos como ECB, CBC, GCM, OCB, entre otros, con soporte para diferentes esquemas de relleno.</p>
+ * 
+ * <p>Los archivos de clave generados se guardan localmente utilizando la clase FileHandler.</p>
+ * 
+ * <p>Se utiliza BouncyCastle como proveedor de seguridad para soportar el algoritmo Camellia.</p>
+ * 
+ * <p>Para el modo GCM y OCB, se genera un IV aleatorio de 12 bytes. Para otros modos (como CBC), se utiliza un IV aleatorio de 16 bytes.</p>
+ * 
+ * <p>Las excepciones durante el cifrado y descifrado son capturadas y relanzadas con mensajes descriptivos.</p>
+ * 
  * @author Eugenio
  */
-
-/*
- * Modos y Padding soportados por Camellia:
- *
- * Modes:
- * ECB
- *  - NoPadding
- *  - PKCS5Padding
- *  - ISO10126Padding
- * CBC
- *  - NoPadding
- *  - PKCS5Padding
- *  - ISO10126Padding
- * CFB
- *  - NoPadding
- * OFB
- *  - NoPadding
- * CTR
- *  - NoPadding
- * GCM
- *  - NoPadding
- * EAX
- *  - NoPadding
- * OCB
- *  - NoPadding
- *
- * Notas:
- * - ECB: Menos seguro debido a la igualdad de cifrados para bloques idénticos de texto plano.
- * - CBC: Adecuado para la mayoría de las aplicaciones que requieren seguridad mejorada respecto a ECB.
- * - CFB, OFB, CTR: Modos que permiten operar sobre flujos de datos y no requieren padding.
- * - GCM, CCM, EAX, OCB: Modos que proporcionan autenticación de mensaje junto con cifrado.
- */
-
-
 public class Camellia {
     private byte[] key;
     private String instanceString = "Camellia/";
     private byte[] iv;
     private String keyFileName;
     
+    /**
+     * Constructor que inicializa la instancia de Camellia con un modo, esquema de relleno y ruta de archivo de clave.
+     * Lee la clave desde el archivo especificado y añade BouncyCastle como proveedor de seguridad.
+     * 
+     * @param mode Modo de cifrado (ECB, CBC, GCM, OCB, etc.).
+     * @param padding Esquema de relleno (PKCS5Padding, NoPadding, etc.).
+     * @param keyPath Ruta del archivo de clave.
+     * @throws IOException Si ocurre un error al leer el archivo de clave.
+     */
     public Camellia(String mode, String padding, String keyPath) throws IOException {
         key = FileHandler.readKeyFromFile(keyPath);
         instanceString += mode.toUpperCase() + "/" + padding;
@@ -84,12 +72,27 @@ public class Camellia {
         }
     }
 
+    /**
+     * Constructor que inicializa la instancia de Camellia con una longitud de clave especificada.
+     * Genera una clave Camellia de la longitud especificada y guarda la clave en un archivo local.
+     * 
+     * @param keySize Longitud de la clave Camellia (128, 192 o 256 bits).
+     * @throws NoSuchProviderException Si no se encuentra el proveedor de seguridad BouncyCastle.
+     * @throws IOException Si ocurre un error al guardar el archivo de clave.
+     */
     public Camellia(int keySize) throws NoSuchProviderException, IOException {
         key = generateKey(keySize);
         keyFileName = "Camellia_" + keySize + ".key";
         FileHandler.saveKeyToFile(keyFileName, key);
     }
     
+    /**
+     * Método estático para generar una clave Camellia de la longitud especificada.
+     * 
+     * @param keySize Longitud de la clave Camellia (128, 192 o 256 bits).
+     * @return Arreglo de bytes que representa la clave generada.
+     * @throws NoSuchProviderException Si no se encuentra el proveedor de seguridad BouncyCastle.
+     */
     private static byte[] generateKey(int keySize) throws NoSuchProviderException {
         // Verificar que el tamaño de la clave es válido
         if (keySize != 128 && keySize != 192 && keySize != 256) {
@@ -107,6 +110,12 @@ public class Camellia {
         }
     }
     
+    /**
+     * Método estático para generar un IV (vector de inicialización) de tamaño especificado.
+     * 
+     * @param size Tamaño del IV en bytes.
+     * @return Arreglo de bytes que representa el IV generado.
+     */
     private static byte[] generateIv(int size) {
         byte[] iv = new byte[size]; // 12 bytes (96 bits) para GCM/OCB, 16 bytes (128 bits) para otros modos
         SecureRandom secureRandom = new SecureRandom();
@@ -114,6 +123,13 @@ public class Camellia {
         return iv;
     }
     
+    /**
+     * Método para cifrar un archivo de entrada y guardar el resultado en un archivo de salida.
+     * 
+     * @param inputFile Archivo de entrada a cifrar.
+     * @param outputFile Archivo de salida cifrado.
+     * @throws Exception Si ocurre un error durante el cifrado.
+     */
     public void encryptFile(File inputFile, File outputFile) throws Exception {
         try {
             SecretKeySpec secretKeySpec = new SecretKeySpec(key, "Camellia");
@@ -143,6 +159,13 @@ public class Camellia {
         }
     }
     
+    /**
+     * Método para descifrar un archivo de entrada y guardar el resultado en un archivo de salida.
+     * 
+     * @param inputFile Archivo de entrada cifrado.
+     * @param outputFile Archivo de salida descifrado.
+     * @throws Exception Si ocurre un error durante el descifrado.
+     */
     public void decryptFile(File inputFile, File outputFile) throws Exception {
         try {
             SecretKeySpec secretKeySpec = new SecretKeySpec(key, "Camellia");
@@ -178,6 +201,11 @@ public class Camellia {
         }
     }
     
+    /**
+     * Retorna el nombre del archivo de clave generado.
+     * 
+     * @return Nombre del archivo de clave generado.
+     */
     public String getKeyFileName() {
         return keyFileName;
     }

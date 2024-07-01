@@ -1,7 +1,15 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
 package es.uclm.esi.gsya.ciphers.symmetric;
 
 import es.uclm.esi.gsya.utils.FileHandler;
 
+import javax.crypto.*;
+import javax.crypto.spec.GCMParameterSpec;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -10,55 +18,35 @@ import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
-import javax.crypto.BadPaddingException;
-import javax.crypto.Cipher;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.KeyGenerator;
-import javax.crypto.NoSuchPaddingException;
-import javax.crypto.SecretKey;
-import javax.crypto.spec.GCMParameterSpec;
-import javax.crypto.spec.IvParameterSpec;
-import javax.crypto.spec.SecretKeySpec;
 
 /**
- *
+ * Clase que proporciona métodos para cifrar y descifrar archivos utilizando el algoritmo AES en diferentes modos y esquemas de relleno.
+ * Permite la generación de claves aleatorias y el manejo de archivos de clave.
+ * 
+ * <p>El cifrado se puede realizar en modos como ECB y CBC, con soporte para diferentes esquemas de relleno.</p>
+ * 
+ * <p>Los archivos de clave generados se guardan localmente utilizando la clase FileHandler.</p>
+ * 
+ * <p>Para el modo GCM, se genera un IV aleatorio de 12 bytes. Para otros modos (como CBC), se utiliza un IV aleatorio de 16 bytes.</p>
+ * 
+ * <p>Las excepciones durante el cifrado y descifrado son capturadas y relanzadas con mensajes descriptivos.</p>
+ * 
  * @author Eugenio
  */
-
-/*
- * Modos y Padding soportados por AES (Advanced Encryption Standard):
- *
- * Modes:
- * ECB
- *  - PKCS5Padding
- *  - PKCS7Padding
- *  - ISO10126Padding
- * CBC
- *  - PKCS5Padding
- *  - PKCS7Padding
- *  - ISO10126Padding
- * CFB
- *  - NoPadding
- * OFB
- *  - NoPadding
- * CTR
- *  - NoPadding
- * GCM (Galois/Counter Mode)
- *  - NoPadding
- *
- * Notas:
- * - ECB: Menos seguro debido a la igualdad de cifrados para bloques idénticos de texto plano.
- * - CBC: Adecuado para la mayoría de las aplicaciones que requieren seguridad mejorada respecto a ECB.
- * - CFB, OFB, CTR: Modos que permiten operar sobre flujos de datos y no requieren padding.
- * - GCM: Proporciona cifrado autenticado con eficiencia y es ampliamente utilizado en protocolos de red.
- */
-
 public class Aes {
     private byte[] key;
     private String instanceString = "AES/";
     private byte[] iv;
     private String keyFileName;
     
+    /**
+     * Constructor que inicializa la instancia de AES con un modo, esquema de relleno y ruta de archivo de clave.
+     * Lee la clave desde el archivo especificado.
+     * 
+     * @param mode Modo de cifrado (ECB, CBC, CFB, OFB, CTR, GCM).
+     * @param padding Esquema de relleno (PKCS5Padding, ISO10126Padding, NoPadding).
+     * @param keyPath Ruta del archivo de clave.
+     */
     public Aes(String mode, String padding, String keyPath){
         try {
             key = FileHandler.readKeyFromFile(keyPath);
@@ -73,6 +61,12 @@ public class Aes {
         }
     }
     
+    /**
+     * Constructor que inicializa la instancia de AES con una longitud de clave especificada.
+     * Genera una clave AES de la longitud especificada y guarda la clave en un archivo local.
+     * 
+     * @param keySize Longitud de la clave AES (128, 192 o 256 bits).
+     */
     public Aes(int keySize){
         key = generateKey(keySize);
         try {
@@ -83,6 +77,12 @@ public class Aes {
         }
     }
     
+    /**
+     * Método estático para generar una clave AES de la longitud especificada.
+     * 
+     * @param keySize Longitud de la clave AES (128, 192 o 256 bits).
+     * @return Arreglo de bytes que representa la clave generada.
+     */
     private static byte[] generateKey(int keySize) {
         // Verificar que el tamaño de la clave es válido
         if (keySize != 128 && keySize != 192 && keySize != 256) {
@@ -99,6 +99,12 @@ public class Aes {
         }
     }
     
+    /**
+     * Método estático para generar un IV (vector de inicialización) de tamaño especificado.
+     * 
+     * @param size Tamaño del IV en bytes.
+     * @return Arreglo de bytes que representa el IV generado.
+     */
     private static byte[] generateIv(int size) {
         byte[] iv = new byte[size]; // 12 bytes (96 bits) para GCM, 16 bytes (128 bits) para otros modos
         SecureRandom secureRandom = new SecureRandom();
@@ -106,6 +112,13 @@ public class Aes {
         return iv;
     }
     
+    /**
+     * Método para cifrar un archivo de entrada y guardar el resultado en un archivo de salida.
+     * 
+     * @param inputFile Archivo de entrada a cifrar.
+     * @param outputFile Archivo de salida cifrado.
+     * @throws Exception Si ocurre un error durante el cifrado.
+     */
     public void encryptFile(File inputFile, File outputFile) throws Exception {
         try {
             SecretKeySpec secretKeySpec = new SecretKeySpec(key, "AES");
@@ -135,6 +148,13 @@ public class Aes {
         }
     }
     
+    /**
+     * Método para descifrar un archivo de entrada y guardar el resultado en un archivo de salida.
+     * 
+     * @param inputFile Archivo de entrada cifrado.
+     * @param outputFile Archivo de salida descifrado.
+     * @throws Exception Si ocurre un error durante el descifrado.
+     */
     public void decryptFile(File inputFile, File outputFile) throws Exception {
         try {
             SecretKeySpec secretKeySpec = new SecretKeySpec(key, "AES");
@@ -170,6 +190,11 @@ public class Aes {
         }
     }
 
+    /**
+     * Retorna el nombre del archivo de clave generado.
+     * 
+     * @return Nombre del archivo de clave generado.
+     */
     public String getKeyFileName() {
         return keyFileName;
     }

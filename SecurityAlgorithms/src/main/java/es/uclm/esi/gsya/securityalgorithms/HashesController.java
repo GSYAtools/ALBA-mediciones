@@ -7,6 +7,7 @@ package es.uclm.esi.gsya.securityalgorithms;
 import es.uclm.esi.gsya.hashes.Md5;
 import es.uclm.esi.gsya.hashes.Ripemd160;
 import es.uclm.esi.gsya.hashes.Sha;
+import es.uclm.esi.gsya.hashes.Whirpool;
 import es.uclm.esi.gsya.utils.FileHandler;
 import es.uclm.esi.gsya.utils.Measure;
 import java.io.File;
@@ -279,6 +280,49 @@ public class HashesController {
         try {
             Ripemd160 ripemd160 = new Ripemd160();
             boolean res = ripemd160.verify(input, hash);
+            System.out.println("Input file matches hash: "+res);
+        } catch (IOException ex) {
+            Logger.getLogger(HashesController.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println(ex.getMessage());
+        }
+        
+    }
+    
+    public static void runWHIRPOOL(String input){
+        Whirpool whirpool = new Whirpool();
+        String hashFileName = "ripemd160.txt";
+        try {
+            Measure.startCPUMeasurement();
+            String hash = whirpool.resume(input);
+            Measure.stopCPUMeasurement();
+            FileHandler.saveTextToFile(hashFileName, hash);
+        } catch (IOException ex) {
+            Logger.getLogger(HashesController.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println(ex.getMessage());
+        }
+        
+        try {
+            showMeasures(input, hashFileName);
+        } catch (IOException ex) {
+            Logger.getLogger(HashesController.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Could not read files to show measures");
+        }
+    }
+    
+    public static void runWHIRPOOL(String input, String hashFile){
+        String hash;
+        try {
+            //Método para verificar
+            hash = FileHandler.readTextFromFile(hashFile);
+        } catch (IOException ex) {
+            Logger.getLogger(HashesController.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Could not read MD5 hash from file.");
+            return;
+        }
+        
+        try {
+            Whirpool whirpool = new Whirpool();
+            boolean res = whirpool.verify(input, hash);
             System.out.println("Input file matches hash: "+res);
         } catch (IOException ex) {
             Logger.getLogger(HashesController.class.getName()).log(Level.SEVERE, null, ex);

@@ -109,6 +109,13 @@ public class SecurityAlgorithmsCLI {
                     Logger.getLogger(SecurityAlgorithmsCLI.class.getName()).log(Level.SEVERE, null, ex);
                     System.out.println(ex.getMessage());
                 }
+            } else if (ALG_RIPEMD_160.equalsIgnoreCase(algorithm)){
+                try {
+                    startRIPEMD_160(operation, inputPath, hashPath);
+                } catch (FileNotFoundException ex) {
+                    Logger.getLogger(SecurityAlgorithmsCLI.class.getName()).log(Level.SEVERE, null, ex);
+                    System.out.println(ex.getMessage());
+                }
             }else {
                 formatter.printHelp("java -jar SecurityAlgorithms.jar", options);
             }
@@ -231,6 +238,18 @@ public class SecurityAlgorithmsCLI {
             HashesController.runSHA_3(input, Integer.parseInt(mode), hash);
         }else{
             throw new UnsupportedOperationException("Operation \""+operation+"\" not defined for SHA-3");
+        }
+    }
+    
+    private static void startRIPEMD_160(String operation, String input, String hash) throws FileNotFoundException{
+        if(input==null || !Files.exists(Paths.get(input))) {throw new FileNotFoundException("Input file \""+input+"\" could not be found");}
+        if(OP_RESUME.equalsIgnoreCase(operation)){
+            HashesController.runRIPEMD_160(input);
+        }else if(OP_VERIFY.equalsIgnoreCase(operation)){
+            if(hash==null || !Files.exists(Paths.get(hash))) {throw new FileNotFoundException("Hash file \""+hash+"\" could not be found. Option \"-hash\" is mandatory for this operation.");}
+            HashesController.runRIPEMD_160(input, hash);
+        }else{
+            throw new UnsupportedOperationException("Operation \""+operation+"\" not defined for RIPEMD-160");
         }
     }
 }

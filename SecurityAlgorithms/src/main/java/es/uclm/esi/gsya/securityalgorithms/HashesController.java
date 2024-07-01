@@ -5,6 +5,7 @@
 package es.uclm.esi.gsya.securityalgorithms;
 
 import es.uclm.esi.gsya.hashes.Md5;
+import es.uclm.esi.gsya.hashes.Ripemd160;
 import es.uclm.esi.gsya.hashes.Sha;
 import es.uclm.esi.gsya.utils.FileHandler;
 import es.uclm.esi.gsya.utils.Measure;
@@ -119,7 +120,7 @@ public class HashesController {
         System.out.println("Input file matches hash: "+res);
     }
 
-    static void runSHA_2(String input, int mode) throws NoSuchAlgorithmException, IOException {
+    public static void runSHA_2(String input, int mode) throws NoSuchAlgorithmException, IOException {
         String hashFileName = "sha_2.txt";
         //Obtengo la instancia
         Sha sha = new Sha();
@@ -156,7 +157,7 @@ public class HashesController {
         }
     }
 
-    static void runSHA_2(String input, int mode, String hashFile) throws NoSuchAlgorithmException, IOException {
+    public static void runSHA_2(String input, int mode, String hashFile) throws NoSuchAlgorithmException, IOException {
         String hash;
         try {
             //Método para verificar
@@ -181,7 +182,7 @@ public class HashesController {
         System.out.println("Input file matches hash: "+res);
     }
 
-    static void runSHA_3(String input, int mode) throws IOException {
+    public static void runSHA_3(String input, int mode) throws IOException {
         String hashFileName = "sha_3.txt";
         //Obtengo la instancia
         Sha sha = new Sha();
@@ -218,7 +219,7 @@ public class HashesController {
         }
     }
 
-    static void runSHA_3(String input, int mode, String hashFile) throws NoSuchAlgorithmException, IOException {
+    public static void runSHA_3(String input, int mode, String hashFile) throws NoSuchAlgorithmException, IOException {
         String hash;
         try {
             //Método para verificar
@@ -241,5 +242,48 @@ public class HashesController {
         }
         
         System.out.println("Input file matches hash: "+res);
+    }
+    
+    public static void runRIPEMD_160(String input){
+        Ripemd160 ripemd160 = new Ripemd160();
+        String hashFileName = "ripemd160.txt";
+        try {
+            Measure.startCPUMeasurement();
+            String hash = ripemd160.resume(input);
+            Measure.stopCPUMeasurement();
+            FileHandler.saveTextToFile(hashFileName, hash);
+        } catch (IOException ex) {
+            Logger.getLogger(HashesController.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println(ex.getMessage());
+        }
+        
+        try {
+            showMeasures(input, hashFileName);
+        } catch (IOException ex) {
+            Logger.getLogger(HashesController.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Could not read files to show measures");
+        }
+    }
+    
+    public static void runRIPEMD_160(String input, String hashFile){
+        String hash;
+        try {
+            //Método para verificar
+            hash = FileHandler.readTextFromFile(hashFile);
+        } catch (IOException ex) {
+            Logger.getLogger(HashesController.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Could not read MD5 hash from file.");
+            return;
+        }
+        
+        try {
+            Ripemd160 ripemd160 = new Ripemd160();
+            boolean res = ripemd160.verify(input, hash);
+            System.out.println("Input file matches hash: "+res);
+        } catch (IOException ex) {
+            Logger.getLogger(HashesController.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println(ex.getMessage());
+        }
+        
     }
 }

@@ -7,5 +7,6 @@ es/uclm/esi/gsya/securityalgorithms/OptionValues.class
 es/uclm/esi/gsya/securityalgorithms/HashesController.class
 es/uclm/esi/gsya/utils/Measure.class
 es/uclm/esi/gsya/securityalgorithms/SymmetricCiphersController.class
+es/uclm/esi/gsya/hashes/Ripemd160.class
 es/uclm/esi/gsya/ciphers/symmetric/Camellia.class
 es/uclm/esi/gsya/utils/FileHandler.class

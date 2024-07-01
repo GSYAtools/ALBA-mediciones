@@ -23,4 +23,6 @@ public interface OptionValues {
     public static String ALG_SHA1 = "sha-1";
     public static String ALG_SHA2 = "sha-2";
     public static String ALG_SHA3 = "sha-3";
+    public static String ALG_RIPEMD_160 = "ripemd-160";
+    public static String ALG_WHIRPOOL = "whirpool";
 }

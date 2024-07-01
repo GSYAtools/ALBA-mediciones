@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package es.uclm.esi.gsya.hashes;
 
 import org.bouncycastle.crypto.digests.WhirlpoolDigest;
@@ -10,8 +6,10 @@ import java.io.FileInputStream;
 import java.io.IOException;
 
 /**
- *
- * @author alarcos
+ * Clase que proporciona métodos para generar y verificar el hash WHIRLPOOL de archivos.
+ * Utiliza la implementación de WHIRLPOOL del proveedor Bouncy Castle.
+ * 
+ * @author Eugenio
  */
 public class Whirpool {
     /**
@@ -39,7 +37,13 @@ public class Whirpool {
         return actualHash.equals(expectedHash);
     }
 
-    // Método para calcular el hash WHIRLPOOL de un archivo
+    /**
+     * Calcula el hash WHIRLPOOL de un archivo especificado.
+     *
+     * @param filePath La ruta del archivo para calcular el hash.
+     * @return El hash WHIRLPOOL del archivo como un arreglo de bytes.
+     * @throws IOException Si ocurre un error al leer el archivo.
+     */
     private byte[] computeWhirlpoolHash(String filePath) throws IOException {
         File file = new File(filePath);
         try (FileInputStream fis = new FileInputStream(file)) {
@@ -59,7 +63,12 @@ public class Whirpool {
         }
     }
 
-    // Método auxiliar para convertir bytes a una cadena hexadecimal
+    /**
+     * Convierte un arreglo de bytes en una cadena hexadecimal.
+     *
+     * @param bytes El arreglo de bytes a convertir.
+     * @return La representación en formato hexadecimal de los bytes.
+     */
     private String bytesToHex(byte[] bytes) {
         StringBuilder sb = new StringBuilder();
         for (byte b : bytes) {

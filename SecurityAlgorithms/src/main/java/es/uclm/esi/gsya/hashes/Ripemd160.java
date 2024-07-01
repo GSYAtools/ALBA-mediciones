@@ -6,8 +6,10 @@ import java.io.IOException;
 import org.bouncycastle.crypto.digests.RIPEMD160Digest;
 
 /**
- *
- * @author alarcos
+ * Clase que proporciona métodos para generar y verificar el hash RIPEMD-160 de archivos.
+ * Utiliza la implementación de RIPEMD-160 del proveedor Bouncy Castle.
+ * 
+ * @author Eugenio
  */
 public class Ripemd160 {
     /**
@@ -35,7 +37,13 @@ public class Ripemd160 {
         return actualHash.equals(expectedHash);
     }
 
-    // Método para calcular el hash RIPEMD-160 de un archivo
+    /**
+    * Calcula el hash RIPEMD-160 de un archivo especificado.
+    *
+    * @param filePath La ruta del archivo para calcular el hash.
+    * @return El hash RIPEMD-160 del archivo como un arreglo de bytes.
+    * @throws IOException Si ocurre un error al leer el archivo.
+    */
     private byte[] computeRIPEMD160Hash(String filePath) throws IOException {
         File file = new File(filePath);
         try (FileInputStream fis = new FileInputStream(file)) {
@@ -55,7 +63,12 @@ public class Ripemd160 {
         }
     }
 
-    // Método auxiliar para convertir bytes a una cadena hexadecimal
+    /**
+    * Convierte un arreglo de bytes en una cadena hexadecimal.
+    *
+    * @param bytes El arreglo de bytes a convertir.
+    * @return La representación en formato hexadecimal de los bytes.
+    */
     private String bytesToHex(byte[] bytes) {
         StringBuilder sb = new StringBuilder();
         for (byte b : bytes) {

@@ -14,14 +14,14 @@
         <dependency>
             <groupId>org.bouncycastle</groupId>
             <artifactId>bc-fips</artifactId>
-            <version>1.0.2.3</version> <!-- Verificar la última versión disponible -->
+            <version>1.0.2.5</version>
         </dependency>
 
         <!-- Dependencia para Bouncy Castle API con soporte FIPS -->
         <dependency>
             <groupId>org.bouncycastle</groupId>
             <artifactId>bcpkix-fips</artifactId>
-            <version>1.0.7</version> <!-- Verificar la última versión disponible -->
+            <version>1.0.7</version>
         </dependency>
         
         <!-- BouncyCastle Dependency -->

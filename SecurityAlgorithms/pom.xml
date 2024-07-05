@@ -10,6 +10,20 @@
     <packaging>jar</packaging>
 
     <dependencies>
+        <!-- Dependencia para Bouncy Castle FIPS -->
+        <dependency>
+            <groupId>org.bouncycastle</groupId>
+            <artifactId>bc-fips</artifactId>
+            <version>1.0.2.3</version> <!-- Verificar la última versión disponible -->
+        </dependency>
+
+        <!-- Dependencia para Bouncy Castle API con soporte FIPS -->
+        <dependency>
+            <groupId>org.bouncycastle</groupId>
+            <artifactId>bcpkix-fips</artifactId>
+            <version>1.0.7</version> <!-- Verificar la última versión disponible -->
+        </dependency>
+        
         <!-- BouncyCastle Dependency -->
         <dependency>
             <groupId>org.bouncycastle</groupId>
@@ -24,7 +38,16 @@
             <version>1.4</version>
         </dependency>
     </dependencies>
-
+    
+    <repositories>
+        <!-- Repositorio de Bouncy Castle para versiones FIPS -->
+        <repository>
+            <id>bouncycastle-repo</id>
+            <name>Bouncy Castle Repository</name>
+            <url>https://repo.bouncycastle.org/</url>
+        </repository>
+    </repositories>
+    
     <build>
         <plugins>
             <!-- Maven JAR Plugin -->

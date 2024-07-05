@@ -27,7 +27,6 @@ public class SecurityAlgorithmsCLI {
         options.addOption("pad", "padding", true, "Padding scheme (para cifrados de bloque)");
         options.addOption("key", true, "Ruta a la clave o tamaño de clave (para generación de claves)");
         options.addOption("hash", true, "Ruta al fichero donde se encuentra el hash");
-        options.addOption("nonce", true, "Ruta al fichero donde se encuentra el nonce");
         options.addOption("in","input", true, "Ruta al archivo de entrada");
         options.addOption("out","output", true, "Ruta al archivo de salida");
         options.addOption("times", true, "Numero de veces que se repetirá la operación (solo encrypt o decrypt)");
@@ -44,7 +43,6 @@ public class SecurityAlgorithmsCLI {
             String padding = cmd.getOptionValue("padding");
             String keyPath = cmd.getOptionValue("key");
             String hashPath = cmd.getOptionValue("hash");
-            String noncePath = cmd.getOptionValue("nonce");
             String inputPath = cmd.getOptionValue("input");
             String outputPath = cmd.getOptionValue("output");
             String times = cmd.getOptionValue("times"); //times.matches("^[1-9]\\d*$")
@@ -66,14 +64,21 @@ public class SecurityAlgorithmsCLI {
                 }
             } else if (ALG_CHACHA20.equalsIgnoreCase(algorithm)) {
                 try {
-                    startChaCha20(operation, noncePath, keyPath, inputPath, outputPath);
+                    startChaCha20(operation, keyPath, inputPath, outputPath);
                 } catch (Exception ex) {
                     Logger.getLogger(SecurityAlgorithmsCLI.class.getName()).log(Level.SEVERE, null, ex);
                     System.out.println(ex.getMessage());
                 }
             } else if (ALG_CHACHA20_POLY1305.equalsIgnoreCase(algorithm)) {
                 try {
-                    startChaCha20_Poly1305(operation, noncePath, keyPath, inputPath, outputPath);
+                    startChaCha20_Poly1305(operation, keyPath, inputPath, outputPath);
+                } catch (Exception ex) {
+                    Logger.getLogger(SecurityAlgorithmsCLI.class.getName()).log(Level.SEVERE, null, ex);
+                    System.out.println(ex.getMessage());
+                }
+            } else if (ALG_XCHACHA20.equalsIgnoreCase(algorithm)) {
+                try {
+                    startXChaCha20(operation, keyPath, inputPath, outputPath);
                 } catch (Exception ex) {
                     Logger.getLogger(SecurityAlgorithmsCLI.class.getName()).log(Level.SEVERE, null, ex);
                     System.out.println(ex.getMessage());
@@ -165,29 +170,40 @@ public class SecurityAlgorithmsCLI {
         }
     }
     
-    private static void startChaCha20(String operation, String nonce, String key, String input, String output) throws Exception{
+    private static void startChaCha20(String operation, String key, String input, String output) throws Exception{
         if(OP_KEYGEN.equalsIgnoreCase(operation)){
             SymmetricCiphersController.runChaCha20(ALG_CHACHA20);
         }else if((OP_ENCRYPT.equalsIgnoreCase(operation) || OP_DECRYPT.equalsIgnoreCase(operation))){
             if(key==null || !Files.exists(Paths.get(key))) {throw new FileNotFoundException("Key file \""+key+"\" could not be found");}
             if(input==null || !Files.exists(Paths.get(input))) {throw new FileNotFoundException("Input file \""+input+"\" could not be found");}
-            if(nonce == null){throw new MissingArgumentException("Argument \"-nonce\" is mandatory for ChaCha20 operation "+operation);}
             if(output == null){throw new MissingArgumentException("Argument \"-out\" is mandatory for ChaCha20 operation "+operation);}
-            SymmetricCiphersController.runChaCha20(operation, ALG_CHACHA20, nonce, key, input, output);
+            SymmetricCiphersController.runChaCha20(operation, ALG_CHACHA20, key, input, output);
         }else {
             throw new UnsupportedOperationException("Operation \""+operation+"\" not defined for ChaCha20");
         }
     }
     
-    private static void startChaCha20_Poly1305(String operation, String nonce, String key, String input, String output) throws Exception{
+    private static void startChaCha20_Poly1305(String operation, String key, String input, String output) throws Exception{
         if(OP_KEYGEN.equalsIgnoreCase(operation)){
             SymmetricCiphersController.runChaCha20(ALG_CHACHA20_POLY1305);
         }else if((OP_ENCRYPT.equalsIgnoreCase(operation) || OP_DECRYPT.equalsIgnoreCase(operation))){
             if(key==null || !Files.exists(Paths.get(key))) {throw new FileNotFoundException("Key file \""+key+"\" could not be found");}
             if(input==null || !Files.exists(Paths.get(input))) {throw new FileNotFoundException("Input file \""+input+"\" could not be found");}
-            if(nonce == null){throw new MissingArgumentException("Argument \"-nonce\" is mandatory for ChaCha20 operation "+operation);}
             if(output == null){throw new MissingArgumentException("Argument \"-out\" is mandatory for ChaCha20 operation "+operation);}
-            SymmetricCiphersController.runChaCha20(operation, ALG_CHACHA20_POLY1305, nonce, key, input, output);
+            SymmetricCiphersController.runChaCha20(operation, ALG_CHACHA20_POLY1305, key, input, output);
+        }else {
+            throw new UnsupportedOperationException("Operation \""+operation+"\" not defined for ChaCha20");
+        }
+    }
+    
+    private static void startXChaCha20(String operation, String key, String input, String output) throws Exception{
+        if(OP_KEYGEN.equalsIgnoreCase(operation)){
+            SymmetricCiphersController.runChaCha20(ALG_XCHACHA20);
+        }else if((OP_ENCRYPT.equalsIgnoreCase(operation) || OP_DECRYPT.equalsIgnoreCase(operation))){
+            if(key==null || !Files.exists(Paths.get(key))) {throw new FileNotFoundException("Key file \""+key+"\" could not be found");}
+            if(input==null || !Files.exists(Paths.get(input))) {throw new FileNotFoundException("Input file \""+input+"\" could not be found");}
+            if(output == null){throw new MissingArgumentException("Argument \"-out\" is mandatory for ChaCha20 operation "+operation);}
+            SymmetricCiphersController.runChaCha20(operation, ALG_XCHACHA20, key, input, output);
         }else {
             throw new UnsupportedOperationException("Operation \""+operation+"\" not defined for ChaCha20");
         }

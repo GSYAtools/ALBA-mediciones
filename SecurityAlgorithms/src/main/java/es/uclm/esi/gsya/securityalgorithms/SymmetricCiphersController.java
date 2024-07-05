@@ -11,6 +11,7 @@ import static es.uclm.esi.gsya.securityalgorithms.OptionValues.*;
 import es.uclm.esi.gsya.utils.Measure;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.util.logging.Level;
@@ -161,16 +162,8 @@ public class SymmetricCiphersController {
      * @param algorithm Algoritmo ChaCha20 a utilizar.
      */
     public static void runChaCha20(String algorithm){
-        ChaCha20 chacha;
-        try {
-            chacha = new ChaCha20(algorithm, ChaCha20.NONCE_SIZE);
-        } catch (IOException | NoSuchAlgorithmException ex) {
-            Logger.getLogger(SymmetricCiphersController.class.getName()).log(Level.SEVERE, null, ex);
-            System.out.println(ex.getMessage());
-            return;
-        }
+        ChaCha20 chacha = new ChaCha20(algorithm);
         System.out.printf("\nKey File Successfully Generated with name: %s\n", chacha.getKeyFileName());
-        System.out.printf("\nNonce File Successfully Generated with name: %s\n", chacha.getNonceFileName());
     }
     
     /**
@@ -178,39 +171,17 @@ public class SymmetricCiphersController {
      * 
      * @param operation Operación a realizar (encriptar o desencriptar).
      * @param algorithm Algoritmo ChaCha20 a utilizar.
-     * @param nonce Nonce para ChaCha20.
      * @param key Clave de cifrado.
      * @param input Ruta del archivo de entrada.
      * @param output Ruta del archivo de salida.
      * @throws Exception Si ocurre un error durante la operación de cifrado o descifrado.
      */
-    public static void runChaCha20(String operation,String algorithm, String nonce, String key, String input, String output) throws Exception {
-        ChaCha20 chacha = new ChaCha20(key, nonce, algorithm);
+    public static void runChaCha20(String operation,String algorithm, String key, String input, String output) throws Exception {
+        ChaCha20 chacha = new ChaCha20(key, algorithm);
         if(OP_ENCRYPT.equalsIgnoreCase(operation)){
-            chacha.encryptFileChaCha20(new File(input), new File(output));
+            chacha.encrypt(Paths.get(input), Paths.get(output));
         }else if(OP_DECRYPT.equalsIgnoreCase(operation)){
-            chacha.decryptFileChaCha20(new File(input), new File(output));
-        }
-    }
-    
-    /**
-     * Ejecuta ChaCha20-Poly1305 para cifrar o descifrar un archivo especificado.
-     * 
-     * @param operation Operación a realizar (encriptar o desencriptar).
-     * @param algorithm Algoritmo ChaCha20 a utilizar.
-     * @param nonce Nonce para ChaCha20.
-     * @param key Clave de cifrado.
-     * @param input Ruta del archivo de entrada.
-     * @param output Ruta del archivo de salida.
-     * @throws IOException Si ocurre un error de entrada/salida durante la operación.
-     * @throws Exception Si ocurre un error durante la operación de cifrado o descifrado.
-     */
-    public static void runChaCha20_Poly1305(String operation,String algorithm, String nonce, String key, String input, String output) throws IOException, Exception {
-        ChaCha20 chacha = new ChaCha20(key, nonce, algorithm);
-        if(OP_ENCRYPT.equalsIgnoreCase(operation)){
-            chacha.encryptFileChaCha20Poly1305(new File(input), new File(output));
-        }else if(OP_DECRYPT.equalsIgnoreCase(operation)){
-            chacha.decryptFileChaCha20Poly1305(new File(input), new File(output));
+            chacha.decrypt(Paths.get(input), Paths.get(output));
         }
     }
     

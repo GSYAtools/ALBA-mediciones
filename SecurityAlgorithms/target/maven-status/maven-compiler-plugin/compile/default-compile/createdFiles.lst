@@ -1,5 +1,6 @@
 es/uclm/esi/gsya/hashes/Md5.class
 es/uclm/esi/gsya/ciphers/symmetric/Aes.class
+es/uclm/esi/gsya/ciphers/asymmetric/Rsa.class
 es/uclm/esi/gsya/hashes/Sha.class
 es/uclm/esi/gsya/securityalgorithms/SecurityAlgorithmsCLI.class
 es/uclm/esi/gsya/securityalgorithms/OptionValues.class

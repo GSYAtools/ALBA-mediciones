@@ -23,13 +23,7 @@ import java.security.Security;
  * La clase permite encriptar y desencriptar archivos a nivel de byte, incluyendo el manejo del nonce.
  * </p>
  */
-public class ChaCha20 {
-
-    static {
-        // Añadir el proveedor de Bouncy Castle
-        Security.addProvider(new BouncyCastleFipsProvider());
-    }
-    
+public class ChaCha20 {   
     private String keyFileName;
     private byte[] key;
     private byte[] nonce;
@@ -43,6 +37,7 @@ public class ChaCha20 {
      * @throws IllegalArgumentException Si el algoritmo proporcionado no es válido.
      */
     public ChaCha20(String algorithm) {
+        Security.addProvider(new BouncyCastleFipsProvider());
         setAlgorithm(algorithm);
         generateKey();
         this.nonce = new byte[nonceLength];
@@ -60,6 +55,7 @@ public class ChaCha20 {
     *                                  no tienen la longitud requerida para el algoritmo seleccionado.
     */
     public ChaCha20(String algorithm, String keyFile) throws IOException{
+        Security.addProvider(new BouncyCastleFipsProvider());
         setAlgorithm(algorithm);
         this.keyFileName = keyFile;
         setKey(FileHandler.readKeyFromFile(keyFileName));

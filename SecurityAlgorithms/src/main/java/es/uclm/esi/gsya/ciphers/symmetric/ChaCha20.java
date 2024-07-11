@@ -11,6 +11,8 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
 import java.security.SecureRandom;
 import java.security.Security;
 
@@ -30,6 +32,12 @@ public class ChaCha20 {
     private int nonceLength; // Longitud del nonce (12 bytes para ChaCha20, 24 bytes para XChaCha20)
     private String algorithm; // Variable para seleccionar el algoritmo
 
+    static {
+        if (Security.getProvider(BouncyCastleFipsProvider.PROVIDER_NAME) == null) {
+            Security.addProvider(new BouncyCastleFipsProvider());
+        }
+    }
+
     /**
      * Constructor de la clase ChaCha20 que permite seleccionar el algoritmo de encriptación.
      *
@@ -37,11 +45,10 @@ public class ChaCha20 {
      * @throws IllegalArgumentException Si el algoritmo proporcionado no es válido.
      */
     public ChaCha20(String algorithm) {
-        Security.addProvider(new BouncyCastleFipsProvider());
         setAlgorithm(algorithm);
         generateKey();
         this.nonce = new byte[nonceLength];
-        this.keyFileName = algorithm+".key";
+        this.keyFileName = "ChaCha20.key";
     }
     
     /**
@@ -55,7 +62,6 @@ public class ChaCha20 {
     *                                  no tienen la longitud requerida para el algoritmo seleccionado.
     */
     public ChaCha20(String algorithm, String keyFile) throws IOException{
-        Security.addProvider(new BouncyCastleFipsProvider());
         setAlgorithm(algorithm);
         this.keyFileName = keyFile;
         setKey(FileHandler.readKeyFromFile(keyFileName));
@@ -91,14 +97,23 @@ public class ChaCha20 {
      *
      */
     public void generateKey() {
+        KeyGenerator keyGen = null;
         try {
-            KeyGenerator keyGen = KeyGenerator.getInstance("ChaCha20", "BCFIPS");
-            keyGen.init(256, new SecureRandom());
-            SecretKey secretKey = keyGen.generateKey();
-            this.key = secretKey.getEncoded();
+            keyGen = KeyGenerator.getInstance("ChaCha20", "BCFIPS");
+        } catch (NoSuchAlgorithmException | NoSuchProviderException ex) {
+            System.out.println(ex.getMessage());
+            return;
+        }
+        keyGen.init(256, new SecureRandom());
+        SecretKey secretKey = keyGen.generateKey();
+        this.key = secretKey.getEncoded();
+        try {
+            System.out.println("Empiezo...");
             FileHandler.saveKeyToFile(keyFileName, key);
-        } catch (Exception e) {
-            throw new RuntimeException("Error generating key", e);
+            System.out.println("Termino!!");
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            System.out.println(ex.getMessage());
         }
     }
 
@@ -191,45 +206,37 @@ public class ChaCha20 {
      */
     private void processFile(int mode, Path inputFile, Path outputFile) throws Exception {
         Cipher cipher;
-        switch (algorithm) {
-            case "ChaCha20":
-                cipher = Cipher.getInstance("ChaCha20", "BCFIPS");
-                cipher.init(mode, new javax.crypto.spec.SecretKeySpec(key, "ChaCha20"), new ChaCha20ParameterSpec(nonce, 0));
-                break;
-            case "XChaCha20":
-                cipher = Cipher.getInstance("XChaCha20", "BCFIPS");
-                cipher.init(mode, new javax.crypto.spec.SecretKeySpec(key, "ChaCha20"), new ChaCha20ParameterSpec(nonce, 0));
-                break;
-            case "ChaCha20-Poly1305":
-                cipher = Cipher.getInstance("ChaCha20-Poly1305", "BCFIPS");
-                GCMParameterSpec gcmSpec = new GCMParameterSpec(128, nonce); // 128-bit authentication tag
-                cipher.init(mode, new javax.crypto.spec.SecretKeySpec(key, "ChaCha20"), gcmSpec);
-                break;
-            default:
-                throw new IllegalArgumentException("Unsupported algorithm: " + algorithm);
-        }
-
         try (FileInputStream fis = new FileInputStream(inputFile.toFile());
              FileOutputStream fos = new FileOutputStream(outputFile.toFile())) {
 
-            // Para encriptar, escribimos el nonce al principio del archivo encriptado
             if (mode == Cipher.ENCRYPT_MODE) {
+                 // Para encriptar, escribimos el nonce al principio del archivo encriptado
                 fos.write(nonce);
             } else {
                 // Para desencriptar, necesitamos leer el nonce del archivo
                 fis.read(nonce);
-                if (algorithm.equals("ChaCha20-Poly1305")) {
-                    GCMParameterSpec gcmSpec = new GCMParameterSpec(128, nonce);
+            }
+
+            switch (algorithm) {
+                case "ChaCha20":
+                    cipher = Cipher.getInstance("ChaCha20", "BCFIPS");
+                    cipher.init(mode, new javax.crypto.spec.SecretKeySpec(key, "ChaCha20"), new ChaCha20ParameterSpec(nonce, 0));
+                    break;
+                case "XChaCha20":
+                    cipher = Cipher.getInstance("XChaCha20", "BCFIPS");
+                    cipher.init(mode, new javax.crypto.spec.SecretKeySpec(key, "ChaCha20"), new ChaCha20ParameterSpec(nonce, 0));
+                    break;
+                case "ChaCha20-Poly1305":
+                    cipher = Cipher.getInstance("ChaCha20-Poly1305", "BCFIPS");
+                    GCMParameterSpec gcmSpec = new GCMParameterSpec(128, nonce); // 128-bit authentication tag
                     cipher.init(mode, new javax.crypto.spec.SecretKeySpec(key, "ChaCha20"), gcmSpec);
-                } else {
-                    ChaCha20ParameterSpec paramSpec = new ChaCha20ParameterSpec(nonce, 0);
-                    cipher.init(mode, new javax.crypto.spec.SecretKeySpec(key, "ChaCha20"), paramSpec);
-                }
+                    break;
+                default:
+                    throw new IllegalArgumentException("Unsupported algorithm: " + algorithm);
             }
 
             byte[] buffer = new byte[1024];
             int bytesRead;
-
             while ((bytesRead = fis.read(buffer)) != -1) {
                 byte[] output = cipher.update(buffer, 0, bytesRead);
                 if (output != null) {
@@ -240,6 +247,8 @@ public class ChaCha20 {
             if (output != null) {
                 fos.write(output);
             }
+        } catch (IOException e) {
+            throw new RuntimeException("Error processing file", e);
         }
     }
 }

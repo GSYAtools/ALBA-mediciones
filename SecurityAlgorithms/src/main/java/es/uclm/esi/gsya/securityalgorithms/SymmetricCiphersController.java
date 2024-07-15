@@ -12,7 +12,6 @@ import es.uclm.esi.gsya.utils.Measure;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
-import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -73,7 +72,9 @@ public class SymmetricCiphersController {
         if(OP_ENCRYPT.equalsIgnoreCase(operation)){
             try {
                 Measure.startCPUMeasurement();
+                Measure.call(2000);
                 aes.encryptFile(new File(input), new File(output));
+                Measure.call(5000);
                 Measure.stopCPUMeasurement();
                 System.out.printf("\nFile Successfully Encrypted.\n");
                 showMeasures(input, output);
@@ -83,7 +84,9 @@ public class SymmetricCiphersController {
         }else if(OP_DECRYPT.equalsIgnoreCase(operation)){
             try {
                 Measure.startCPUMeasurement();
+                Measure.call(2000);
                 aes.decryptFile(new File(input), new File(output));
+                Measure.call(5000);
                 Measure.stopCPUMeasurement();
                 System.out.printf("\nFile Successfully Decrypted.\n");
                 showMeasures(input, output);

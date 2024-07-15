@@ -41,4 +41,16 @@ public class Measure {
     public static long calculateCompression(long original, long compressed){
         return (compressed / original - 1) * -100;
     }
+    
+    /***** GREEN TEAM CODE *****/
+    
+    public static void call(int time) {
+        //waiting time: init 2000, finish 5000
+        try {
+              Runtime.getRuntime().exec("java -jar eethan-c.jar");
+              Thread.sleep(time);
+        } catch (Exception e) {
+              //e.printStackTrace();
+        }
+    }
 }

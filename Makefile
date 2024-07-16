@@ -30,7 +30,6 @@ copy-jar: $(DOCKER_DIR)
 build: prepare copy-jar
 	docker build -t $(IMAGE_NAME) $(DOCKER_DIR)
 	docker run -d --name $(CONTAINER_NAME) $(IMAGE_NAME)
-	docker start $(CONTAINER_NAME)
 	
 #Regla para detener el contenedor
 stop:
@@ -38,6 +37,7 @@ stop:
 
 #Regla para probar AES
 aes:
+	docker start $(CONTAINER_NAME)
 	docker exec -i $(CONTAINER_NAME) sh test_aes.sh
 
 # Regla para limpiar el directorio docker y eliminar el contenedor

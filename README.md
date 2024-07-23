@@ -1,5 +1,5 @@
 <div style="text-align: justify; text-justify: inter-word;">
-  <p>Puedes clonar este repositorio:</p>
+  <sub>Puedes clonar este repositorio:</sub>
   <pre><code>git clone https://github.com/GSYAtools/ALBA-mediciones</code></pre>
 </div>
 
@@ -9,7 +9,7 @@
 </div>
 
 <div>
-  <h2>Algoritmos de Cifrado Asimétrico</h2>
+  <h2>Algoritmos de Cifrado Simétrico</h2>
   <h3>AES (Advanced Encryption Standard)</h3>
   <table>
     <tr>
@@ -47,7 +47,9 @@
       <td>NoPadding</td>
     </tr>
   </table>
-
+  <pre><code>java -jar SecurityAlgorithms -alg aes -op keygen -key 128|192|256</code></pre>
+  <pre><code>java -jar SecurityAlgorithms -alg aes -op encrypt|decrypt -mode MODO -pad PADDING -key key_file_path -in input_file_path -out output_file_path</code></pre>
+  
   <h3>Camellia Cipher</h3>
   <table>
     <tr>
@@ -85,4 +87,36 @@
       <td>NoPadding</td>
     </tr>
   </table>
+  <pre><code>java -jar SecurityAlgorithms -alg camellia -op keygen -key 128|192|256</code></pre>
+  <pre><code>java -jar SecurityAlgorithms -alg camellia -op encrypt|decrypt -mode MODO -pad PADDING -key key_file_path -in input_file_path -out output_file_path</code></pre>
+</div>
+
+<div>
+  <h2>Algoritmos de Cifrado Simétrico</h2>
+  <h3>RSA</h3>
+</div>
+
+<div>
+  <h2>Funciones de Resumen</h2>
+  <h3>MD5</h3>
+  <pre><code>java -jar SecurityAlgorithms -alg md5 -op resume -in input_file_path</code></pre>
+  <pre><code>java -jar SecurityAlgorithms -alg md5 -op verify -hash hash_file_path -in file_path</code></pre>
+
+  <h3>SHA</h3>
+  <pre><code>java -jar SecurityAlgorithms -alg sha-1 -op resume -in input_file_path</code></pre>
+  <pre><code>java -jar SecurityAlgorithms -alg sha-1 -op verify -hash hash_file_path -in file_path</code></pre>
+  <br>
+  <pre><code>java -jar SecurityAlgorithms -alg sha-2 -op resume -mode 256|512 -in input_file_path</code></pre>
+  <pre><code>java -jar SecurityAlgorithms -alg sha-2 -op verify -mode 256|512 -hash hash_file_path -in file_path</code></pre>
+  <br>
+  <pre><code>java -jar SecurityAlgorithms -alg sha-3 -op resume -mode 256|512 -in input_file_path</code></pre>
+  <pre><code>java -jar SecurityAlgorithms -alg sha-3 -op verify -mode 256|512 -hash hash_file_path -in file_path</code></pre>
+
+  <h3>RIPEMD-160</h3>
+  <pre><code>java -jar SecurityAlgorithms -alg ripemd-160 -op resume -in input_file_path</code></pre>
+  <pre><code>java -jar SecurityAlgorithms -alg ripemd-160 -op verify -hash hash_file_path -in file_path</code></pre>
+
+  <h3>WHIRPOOL</h3>
+  <pre><code>java -jar SecurityAlgorithms -alg whirpool -op resume -in input_file_path</code></pre>
+  <pre><code>java -jar SecurityAlgorithms -alg whirpool -op verify -hash hash_file_path -in file_path</code></pre>
 </div>

@@ -103,7 +103,7 @@
 </div>
 
 <div>
-  <h2>Algoritmos de Cifrado Simétrico</h2>
+  <h2>Algoritmos de Cifrado Asimétrico</h2>
   <h3>RSA</h3>
 </div>
 

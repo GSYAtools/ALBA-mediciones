@@ -102,7 +102,7 @@
   <pre><code>java -jar SecurityAlgorithms -alg md5 -op resume -in input_file_path</code></pre>
   <pre><code>java -jar SecurityAlgorithms -alg md5 -op verify -hash hash_file_path -in file_path</code></pre>
 
-  <h3>SHA</h3>
+  <h3>SHA-1, SHA-2, SHA-3</h3>
   <pre><code>java -jar SecurityAlgorithms -alg sha-1 -op resume -in input_file_path</code></pre>
   <pre><code>java -jar SecurityAlgorithms -alg sha-1 -op verify -hash hash_file_path -in file_path</code></pre>
   <br>

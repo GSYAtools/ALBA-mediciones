@@ -39,6 +39,7 @@ stop:
 aes:
 	docker start $(CONTAINER_NAME)
 	docker exec -i $(CONTAINER_NAME) sh test_aes.sh
+	docker stop $(CONTAINER_NAME)
 
 # Regla para limpiar el directorio docker y eliminar el contenedor
 clean:

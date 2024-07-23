@@ -1,6 +1,17 @@
 <div style="text-align: justify; text-justify: inter-word;">
-  <sub>Puedes clonar este repositorio:
-  <pre><code>git clone https://github.com/GSYAtools/ALBA-mediciones</code></pre></sub>
+  <sub>
+    Puedes clonar este repositorio:
+    <pre><code>git clone https://github.com/GSYAtools/ALBA-mediciones</code></pre>
+    <h2>Makefile</h2>
+    Tras clonar el repositorio, podemos ejecutar el Makefile para montar el proyecto con Docker
+    <br>
+    Generará la imagen del proyecto y el contendor, copiando el .jar del proyecto y el contenido de la carpeta "test_files".
+    <pre><code>make build</code></pre>
+    Ejecutará las pruebas para el algoritmo seleccionado.
+    <pre><code>make [algoritmo]</code></pre>
+    Eliminará el contenedor y la imagen, así como las carpetas temporales generadas para Docker.
+    <pre><code>make clean</code></pre>
+  </sub>
 </div>
 
 <div style="text-align: justify; text-justify: inter-word;">

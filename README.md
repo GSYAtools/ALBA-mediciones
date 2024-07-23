@@ -1,6 +1,6 @@
 <div style="text-align: justify; text-justify: inter-word;">
-  <sub>Puedes clonar este repositorio:</sub>
-  <pre><code>git clone https://github.com/GSYAtools/ALBA-mediciones</code></pre>
+  <sub>Puedes clonar este repositorio:
+  <pre><code>git clone https://github.com/GSYAtools/ALBA-mediciones</code></pre></sub>
 </div>
 
 <div style="text-align: justify; text-justify: inter-word;">

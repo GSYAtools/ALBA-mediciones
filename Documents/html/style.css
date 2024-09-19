@@ -1,0 +1,74 @@
+/* Estilos para simular un folio */
+
+body {
+	background-color: #F5F5F5; /* Color de fondo */
+	font-family: 'Roboto', sans-serif; /* Fuente Roboto */
+	margin: 40px; /* Margen exterior más ancho */
+	padding: 20px; /* Padding interior */
+	border: 1px solid #CCCCCC; /* Borde */
+	border-radius: 10px; /* Esquinas redondeadas */
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Sombra */
+	width: 70%; /* Ancho del contenido */
+	margin: 40px auto; /* Centrar contenido */
+}
+
+h1, h2, h3, h4, h5, h6 {
+	color: #333; /* Color de título */
+	margin-bottom: 10px; /* Margen inferior */
+}
+
+p {
+	margin-bottom: 20px; /* Margen inferior */
+	text-align: justify; /* Alineación de texto justificada */
+}
+
+ul {
+	list-style: none; /* Quitar viñetas */
+	padding: 0; /* Quitar padding */
+	margin: 0; /* Quitar margen */
+}
+
+li {
+	margin-bottom: 10px; /* Margen inferior */
+	text-align: justify; /* Alineación de texto justificada */
+}
+
+a {
+	text-decoration: none; /* Quitar subrayado */
+	color: #00698F; /* Color de enlace */
+}
+
+a:hover {
+	color: #00467F; /* Color de enlace al pasar el mouse */
+}
+
+.code {
+	background-color: #F0F0F0; /* Color de fondo del código */
+	padding: 10px; /* Padding interior del código */
+	border: 1px solid #CCCCCC; /* Borde del código */
+	border-radius: 10px; /* Esquinas redondeadas del código */
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+    border: 1px solid #ddd;
+  }
+  
+  th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+  }
+  
+  th {
+    background-color: #f0f0f0;
+  }
+  
+  tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+  
+  tr:hover {
+    background-color: #ccc;
+  }

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Camellia Cipher</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+
+<body>
+    <header>
+        <h1>Camellia</h1>
+        <p>Documentación sobre el algoritmo de cifrado simétrico Camellia, sus fundamentos y aplicaciones.</p>
+    </header>
+    
+    <section>
+        <h2>Introducción</h2>
+        <p>
+            Camellia es un algoritmo de cifrado simétrico desarrollado conjuntamente por Mitsubishi Electric Corporation y NTT (Nippon Telegraph and Telephone Corporation). Fue adoptado como estándar internacional en el año 2000. Este algoritmo fue diseñado para ser rápido, seguro y adecuado para una amplia gama de aplicaciones criptográficas.
+        </p>
+    </section>
+
+    <section>
+        <h2>Historia</h2>
+        <p>
+            Camellia fue desarrollado como una alternativa robusta y eficiente a otros algoritmos de cifrado simétrico disponibles en ese momento. Su diseño se basa en principios criptográficos sólidos y ha sido adoptado en varios estándares de seguridad.
+        </p>
+    </section>
+
+    <section>
+        <h2>Fundamentos de Camellia</h2>
+        <p>
+            Camellia es un cifrado de bloque simétrico que opera en bloques de 128 bits y admite claves de 128, 192 y 256 bits. Al igual que AES, Camellia utiliza un conjunto de rondas para cifrar y descifrar datos.
+        </p>
+        <h3>Estructura del Algoritmo</h3>
+        <p>
+            El proceso de cifrado Camellia implica una serie de rondas, que varían en número según la longitud de la clave:
+        </p>
+        <ul>
+            <li>18 rondas para claves de 128 bits o 192 bits</li>
+            <li>24 rondas para claves de 256 bits</li>
+        </ul>
+        <p>
+            Cada ronda del proceso de cifrado incluye una combinación de sustituciones, permutaciones y operaciones matemáticas realizadas en la matriz de estado de datos.
+        </p>
+        <h4>Pasos de cada ronda en Camellia:</h4>
+        <ol>
+            <li><strong>Substitution Layer:</strong> Sustitución no lineal de bytes.</li>
+            <li><strong>Linear Transformation Layer:</strong> Transformación lineal de los datos.</li>
+            <li><strong>Key Addition Layer:</strong> Combinación de la matriz de estado con la subclave de la ronda usando una operación XOR.</li>
+        </ol>
+    </section>
+
+    <section>
+        <h2>Modos de Operación</h2>
+        <p>
+            Al igual que AES, Camellia se utiliza junto con diferentes modos de operación para cifrar datos de longitud arbitraria. Algunos modos de operación comunes incluyen:
+        </p>
+        <ul>
+            <li><strong>ECB (Electronic Codebook):</strong> Cada bloque de datos se cifra de forma independiente. No se recomienda debido a la vulnerabilidad a ciertos ataques.</li>
+            <li><strong>CBC (Cipher Block Chaining):</strong> Cada bloque de datos se combina con el bloque anterior antes de ser cifrado.</li>
+            <li><strong>CFB (Cipher Feedback):</strong> Convierte un bloque cifrado en un flujo de bits, permitiendo el cifrado de bits individuales o grupos de bits.</li>
+            <li><strong>OFB (Output Feedback):</strong> Similar a CFB pero preprocesa el bloque de cifrado, permitiendo un cifrado paralelo.</li>
+            <li><strong>CTR (Counter):</strong> Genera un flujo de bits cifrante mediante un contador, permitiendo un cifrado paralelo eficiente.</li>
+            <li><strong>GCM (Galoi/Counter Mode):</strong> Proporciona autenticación de datos junto con cifrado en modo CTR.</li>
+        </ul>
+        <p>La elección del modo de operación depende de la aplicación específica y los requisitos de seguridad.</p>
+    </section>
+
+    <section>
+        <h2>Aplicaciones y Usos</h2>
+        <p>
+            Camellia se utiliza ampliamente en diversas aplicaciones de seguridad, incluyendo:
+        </p>
+        <ul>
+            <li>Seguridad de redes</li>
+            <li>Protocolos seguros de comunicación</li>
+            <li>Cifrado de datos sensibles</li>
+            <li>Protección de archivos y almacenamiento seguro</li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>Recursos Adicionales</h2>
+        <p>Para obtener más información sobre Camellia, consulta los siguientes recursos:</p>
+        <ul>
+            <li><a href="https://www.ipa.go.jp/security/enc/CRYPTREC/fy16/doc/overview-e.html" target="_blank">CRYPTREC: Overview of the Camellia Algorithm</a> - Descripción general del algoritmo Camellia.</li>
+            <li><a href="https://www.ntt.co.jp/news/news16e/0101/010105b.html" target="_blank">NTT: Camellia Specification</a> - Especificación técnica del algoritmo Camellia de NTT.</li>
+            <li><a href="https://www.sans.org/security-resources/encryption/camellia-cipher" target="_blank">SANS Institute: Camellia Cipher</a> - Análisis y características del cifrado Camellia.</li>
+        </ul>
+    </section>
+
+</body>
+
+</html>

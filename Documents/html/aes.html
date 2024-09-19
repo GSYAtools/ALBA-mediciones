@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AES (Advanced Encryption Standard)</title>
+	<link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>AES (Advanced Encryption Standard)</h1>
+        <p>Documentación sobre el algoritmo de cifrado AES, sus fundamentos y aplicaciones.</p>
+    </header>
+    
+    <section>
+        <h2>Introducción</h2>
+        <p>
+            El <strong>Advanced Encryption Standard (AES)</strong> es un algoritmo de cifrado simétrico que fue adoptado como estándar por el Instituto Nacional de Estándares y Tecnología de los Estados Unidos (NIST) en 2001. AES se utiliza para asegurar datos en una variedad de aplicaciones, desde el cifrado de archivos hasta la seguridad de comunicaciones en redes.
+        </p>
+    </section>
+
+    <section>
+        <h2>Historia</h2>
+        <p>
+            AES fue seleccionado a través de una competición organizada por el NIST para encontrar un reemplazo seguro para el antiguo estándar de cifrado, el <a href="https://csrc.nist.gov/publications/detail/fips/46/3/archive/1999-10-25" target="_blank">DES (Data Encryption Standard)</a>. El algoritmo ganador fue desarrollado por los criptógrafos belgas Joan Daemen y Vincent Rijmen, y es conocido también como Rijndael.
+        </p>
+    </section>
+
+    <section>
+        <h2>Fundamentos del AES</h2>
+        <p>
+            AES es un cifrado de bloque simétrico, lo que significa que utiliza la misma clave tanto para cifrar como para descifrar los datos. Funciona sobre bloques de datos de 128 bits y admite claves de 128, 192 y 256 bits, cada una proporcionando un nivel diferente de seguridad.
+        </p>
+        <h3>Estructura del Algoritmo</h3>
+        <p>
+            El proceso de cifrado AES implica una serie de rondas, que varían en número según la longitud de la clave:
+        </p>
+        <ul>
+            <li>10 rondas para claves de 128 bits</li>
+            <li>12 rondas para claves de 192 bits</li>
+            <li>14 rondas para claves de 256 bits</li>
+        </ul>
+        <p>
+            Cada ronda del proceso de cifrado incluye una combinación de sustituciones, permutaciones y operaciones matemáticas realizadas en la matriz de estado de datos.
+        </p>
+
+        <h4>Pasos de cada ronda en AES:</h4>
+        <ol>
+            <li><strong>SubBytes:</strong> Sustitución no lineal de bytes.</li>
+            <li><strong>ShiftRows:</strong> Desplazamiento de filas de la matriz de estado.</li>
+            <li><strong>MixColumns:</strong> Mezcla de columnas de la matriz de estado.</li>
+            <li><strong>AddRoundKey:</strong> Combinación de la matriz de estado con la subclave de la ronda usando una operación XOR.</li>
+        </ol>
+        <p>En la última ronda, se omite la etapa de <code>MixColumns</code>.</p>
+    </section>
+
+    <section>
+        <h2>Modos de Operación</h2>
+        <p>
+            Para cifrar datos de longitud arbitraria, AES se utiliza junto con un modo de operación. Algunos de los modos de operación más comunes incluyen:
+        </p>
+        <ul>
+            <li><strong>ECB (Electronic Codebook):</strong> Cifra cada bloque de datos de forma independiente. No se recomienda debido a la vulnerabilidad a ciertos ataques.</li>
+            <li><strong>CBC (Cipher Block Chaining):</strong> Cada bloque de datos se combina con el bloque anterior antes de ser cifrado.</li>
+            <li><strong>CFB (Cipher Feedback):</strong> Convierte un bloque cifrado en un flujo de bits, permitiendo cifrado de bits individuales o grupos de bits.</li>
+            <li><strong>OFB (Output Feedback):</strong> Similar a CFB pero preprocesa el bloque de cifrado, lo que permite un cifrado paralelo.</li>
+            <li><strong>CTR (Counter):</strong> Genera un flujo de bits cifrante mediante un contador, permitiendo un cifrado paralelo eficiente.</li>
+            <li><strong>GCM (Galoi/Counter Mode):</strong> Proporciona autenticación de datos junto con cifrado en modo CTR.</li>
+        </ul>        
+        <p>La elección del modo de operación depende de la aplicación específica y los requisitos de seguridad.</p>
+    </section>
+
+    <section>
+        <h2>Aplicaciones y Usos</h2>
+        <p>
+            AES se utiliza ampliamente en diversas aplicaciones de seguridad, incluyendo:
+        </p>
+        <ul>
+            <li>Seguridad de redes Wi-Fi (WPA2)</li>
+            <li>Protocolo TLS/SSL para la protección de comunicaciones en internet</li>
+            <li>Cifrado de discos y archivos</li>
+            <li>VPNs para asegurar conexiones remotas</li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>Recursos Adicionales</h2>
+        <p>Para obtener más información sobre AES, consulta los siguientes recursos:</p>
+        <ul>
+            <li><a href="https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.197.pdf" target="_blank">NIST FIPS 197: Advanced Encryption Standard (AES)</a> - Documento oficial del NIST.</li>
+            <li><a href="https://csrc.nist.gov/publications/detail/sp/800-38a/final" target="_blank">NIST SP 800-38A: Modes of Operation for AES</a> - Descripción de los modos de operación del AES.</li>
+            <li><a href="https://www.ietf.org/rfc/rfc3602.txt" target="_blank">RFC 3602: Use of AES in IPsec ESP</a> - Implementación de AES en IPsec ESP.</li>
+            <li><a href="https://en.wikipedia.org/wiki/Advanced_Encryption_Standard" target="_blank">Wikipedia: Advanced Encryption Standard</a> - Artículo de Wikipedia sobre AES.</li>
+        </ul>
+    </section>
+    
+    <section>
+        <h2>Implementación de la Clase AES</h2>
+        <p>
+            La clase <code>Aes</code> proporciona métodos para cifrar y descifrar archivos utilizando el algoritmo AES en diversos modos de operación y esquemas de relleno. A continuación se detalla su implementación y funcionalidad.
+        </p>
+        
+        <h3>Constructores</h3>
+        <ul>
+            <li>
+                <code>Aes(String mode, String padding, String keyPath)</code>:
+                <p>Inicializa una instancia de <code>Aes</code> con el modo de cifrado, esquema de relleno y ruta del archivo de clave especificados. El archivo de clave se lee desde la ubicación proporcionada.</p>
+                <p><strong>Parámetros:</strong></p>
+                <ul>
+                    <li><code>mode</code> - Modo de cifrado (por ejemplo, ECB, CBC, CFB, OFB, CTR, GCM).</li>
+                    <li><code>padding</code> - Esquema de relleno (por ejemplo, PKCS5Padding, ISO10126Padding, NoPadding).</li>
+                    <li><code>keyPath</code> - Ruta al archivo de clave desde donde se leerá la clave.</li>
+                </ul>
+            </li>
+            <li>
+                <code>Aes(int keySize)</code>:
+                <p>Inicializa una instancia de <code>Aes</code> generando una clave AES de la longitud especificada. La clave generada se guarda en un archivo local.</p>
+                <p><strong>Parámetros:</strong></p>
+                <ul>
+                    <li><code>keySize</code> - Longitud de la clave en bits (128, 192 o 256 bits).</li>
+                </ul>
+            </li>
+        </ul>
+        
+        <h3>Métodos</h3>
+        <ul>
+            <li>
+                <code>private static byte[] generateKey(int keySize)</code>:
+                <p>Genera una clave AES de la longitud especificada.</p>
+                <p><strong>Parámetros:</strong></p>
+                <ul>
+                    <li><code>keySize</code> - Longitud de la clave en bits (debe ser 128, 192 o 256 bits).</li>
+                </ul>
+                <p><strong>Retorna:</strong> Un arreglo de bytes que representa la clave generada.</p>
+            </li>
+            <li>
+                <code>private static byte[] generateIv(int size)</code>:
+                <p>Genera un vector de inicialización (IV) de tamaño especificado.</p>
+                <p><strong>Parámetros:</strong></p>
+                <ul>
+                    <li><code>size</code> - Tamaño del IV en bytes (12 bytes para GCM, 16 bytes para otros modos).</li>
+                </ul>
+                <p><strong>Retorna:</strong> Un arreglo de bytes que representa el IV generado.</p>
+            </li>
+            <li>
+                <code>public void encryptFile(File inputFile, File outputFile) throws Exception</code>:
+                <p>Cifra un archivo de entrada y guarda el resultado en un archivo de salida.</p>
+                <p><strong>Parámetros:</strong></p>
+                <ul>
+                    <li><code>inputFile</code> - Archivo de entrada que se va a cifrar.</li>
+                    <li><code>outputFile</code> - Archivo de salida donde se guardará el archivo cifrado.</li>
+                </ul>
+                <p><strong>Excepciones:</strong> Lanza una excepción si ocurre un error durante el proceso de cifrado.</p>
+            </li>
+            <li>
+                <code>public void decryptFile(File inputFile, File outputFile) throws Exception</code>:
+                <p>Descifra un archivo de entrada cifrado y guarda el resultado en un archivo de salida.</p>
+                <p><strong>Parámetros:</strong></p>
+                <ul>
+                    <li><code>inputFile</code> - Archivo de entrada cifrado.</li>
+                    <li><code>outputFile</code> - Archivo de salida donde se guardará el archivo descifrado.</li>
+                </ul>
+                <p><strong>Excepciones:</strong> Lanza una excepción si ocurre un error durante el proceso de descifrado.</p>
+            </li>
+            <li>
+                <code>public String getKeyFileName()</code>:
+                <p>Retorna el nombre del archivo de clave generado.</p>
+                <p><strong>Retorna:</strong> Un <code>String</code> que representa el nombre del archivo de clave generado.</p>
+            </li>
+        </ul>
+        
+        <h3>Modos y Esquemas de Relleno Soportados</h3>
+        <p>La clase <code>Aes</code> soporta los siguientes modos de operación y esquemas de relleno:</p>
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>AES</th>
+                    <th>Modo de Operación</th>
+                    <th>Esquema de Relleno</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td rowspan="8">AES</td>
+                    <td>ECB</td>
+                    <td>PKCS5Padding</td>
+                </tr>
+                <tr>
+                    <td>ECB</td>
+                    <td>ISO10126Padding</td>
+                </tr>
+                <tr>
+                    <td>CBC</td>
+                    <td>PKCS5Padding</td>
+                </tr>
+                <tr>
+                    <td>CBC</td>
+                    <td>ISO10126Padding</td>
+                </tr>
+                <tr>
+                    <td>CFB</td>
+                    <td>NoPadding</td>
+                </tr>
+                <tr>
+                    <td>OFB</td>
+                    <td>NoPadding</td>
+                </tr>
+                <tr>
+                    <td>CTR</td>
+                    <td>NoPadding</td>
+                </tr>
+                <tr>
+                    <td>GCM</td>
+                    <td>NoPadding</td>
+                </tr>
+            </tbody>
+        </table>
+    
+        <h3>Detalles de Implementación</h3>
+        <p>Dependiendo del modo de operación seleccionado, se generan IVs de tamaños específicos:</p>
+        <ul>
+            <li>Para el modo GCM, se utiliza un IV de 12 bytes.</li>
+            <li>Para otros modos (excepto ECB), se utiliza un IV de 16 bytes.</li>
+        </ul>
+        <p>En el modo ECB, el IV no es utilizado.</p>
+        
+        <h3>Ejemplo de Uso</h3>
+        <pre><code>// Ejemplo de cómo utilizar la clase Aes para cifrar y descifrar un archivo
+    try {
+        // Inicialización con modo, relleno y archivo de clave
+        Aes aes = new Aes("CBC", "PKCS5Padding", "path/to/keyfile.key");
+        
+        // Cifrar un archivo
+        aes.encryptFile(new File("path/to/inputFile.txt"), new File("path/to/encryptedFile.dat"));
+        
+        // Descifrar un archivo
+        aes.decryptFile(new File("path/to/encryptedFile.dat"), new File("path/to/decryptedFile.txt"));
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+    </code></pre>
+    </section>    
+</body>
+</html>

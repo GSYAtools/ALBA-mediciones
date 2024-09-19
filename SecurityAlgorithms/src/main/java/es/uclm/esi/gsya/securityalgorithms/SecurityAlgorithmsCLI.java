@@ -45,10 +45,10 @@ public class SecurityAlgorithmsCLI {
             String hashPath = cmd.getOptionValue("hash");
             String inputPath = cmd.getOptionValue("input");
             String outputPath = cmd.getOptionValue("output");
-            String iterate = cmd.getOptionValue("iterate"); //times.matches("^[1-9]\\d*$")
+            String iterate = cmd.getOptionValue("iterate");
 
             if(iterate != null)
-                if(iterate.matches("^[1-9]\\\\d*$"))
+                if(iterate.matches("^\\d+$"))
                     iterations = Integer.parseInt(iterate);
             
             if (ALG_AES.equalsIgnoreCase(algorithm)) {

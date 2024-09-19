@@ -67,13 +67,14 @@ public class SymmetricCiphersController {
      * @param input Ruta del archivo de entrada.
      * @param output Ruta del archivo de salida.
      */
-    public static void runAes(String operation, String mode, String padding, String key, String input, String output) {
+    public static void runAes(String operation, String mode, String padding, String key, String input, String output, int iterations) {
         Aes aes = new Aes(mode, padding, key);
         if(OP_ENCRYPT.equalsIgnoreCase(operation)){
             try {
                 Measure.startCPUMeasurement();
                 Measure.call(2000);
-                aes.encryptFile(new File(input), new File(output));
+                for(int i=0; i<iterations;i++)
+                    aes.encryptFile(new File(input), new File(output));
                 Measure.call(5000);
                 Measure.stopCPUMeasurement();
                 System.out.printf("\nFile Successfully Encrypted.\n");
@@ -85,7 +86,8 @@ public class SymmetricCiphersController {
             try {
                 Measure.startCPUMeasurement();
                 Measure.call(2000);
-                aes.decryptFile(new File(input), new File(output));
+                for(int i=0; i<iterations;i++)
+                    aes.decryptFile(new File(input), new File(output));
                 Measure.call(5000);
                 Measure.stopCPUMeasurement();
                 System.out.printf("\nFile Successfully Decrypted.\n");

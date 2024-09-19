@@ -16,20 +16,20 @@ import org.apache.commons.cli.*;
  * @author Eugenio
  */
 public class SecurityAlgorithmsCLI { 
-    
+    private static int iterations = 1;
     public static void main(String[] args) {
         // Define las opciones de línea de comandos
         Options options = new Options();
 
-        options.addOption("alg", "algorithm", true, "Algoritmo a usar (AES, Camellia, ChaCha20, etc.)");
-        options.addOption("op", "operation", true, "Tipo de operación: encrypt, decrypt, keygen");
-        options.addOption("mode", true, "Modo de operación (para cifrados de bloque)");
-        options.addOption("pad", "padding", true, "Padding scheme (para cifrados de bloque)");
-        options.addOption("key", true, "Ruta a la clave o tamaño de clave (para generación de claves)");
-        options.addOption("hash", true, "Ruta al fichero donde se encuentra el hash");
-        options.addOption("in","input", true, "Ruta al archivo de entrada");
-        options.addOption("out","output", true, "Ruta al archivo de salida");
-        options.addOption("times", true, "Numero de veces que se repetirá la operación (solo encrypt o decrypt)");
+        options.addOption(OptionValues.CLI_ALG, OptionValues.CLI_ALGORITHM, true, "Algoritmo a usar (AES, Camellia, ChaCha20, etc.)");
+        options.addOption(OptionValues.CLI_OP, OptionValues.CLI_OPERATION, true, "Tipo de operación: encrypt, decrypt, keygen");
+        options.addOption(OptionValues.CLI_MODE, true, "Modo de operación (para cifrados de bloque)");
+        options.addOption(OptionValues.CLI_PAD, OptionValues.CLI_PADDING, true, "Padding scheme (para cifrados de bloque)");
+        options.addOption(OptionValues.CLI_KEY, true, "Ruta a la clave o tamaño de clave (para generación de claves)");
+        options.addOption(OptionValues.CLI_HASH, true, "Ruta al fichero donde se encuentra el hash");
+        options.addOption(OptionValues.CLI_IN, OptionValues.CLI_INPUT, true, "Ruta al archivo de entrada");
+        options.addOption(OptionValues.CLI_OUT, OptionValues.CLI_OUTPUT, true, "Ruta al archivo de salida");
+        options.addOption(OptionValues.CLI_IT, OptionValues.CLI_ITERATE, true, "Numero de veces que se repetirá la operación");
 
         CommandLineParser parser = new DefaultParser();
         HelpFormatter formatter = new HelpFormatter();
@@ -45,8 +45,11 @@ public class SecurityAlgorithmsCLI {
             String hashPath = cmd.getOptionValue("hash");
             String inputPath = cmd.getOptionValue("input");
             String outputPath = cmd.getOptionValue("output");
-            String times = cmd.getOptionValue("times"); //times.matches("^[1-9]\\d*$")
-            
+            String iterate = cmd.getOptionValue("iterate"); //times.matches("^[1-9]\\d*$")
+
+            if(iterate != null)
+                if(iterate.matches("^[1-9]\\\\d*$"))
+                    iterations = Integer.parseInt(iterate);
             
             if (ALG_AES.equalsIgnoreCase(algorithm)) {
                 try {
@@ -148,7 +151,7 @@ public class SecurityAlgorithmsCLI {
             if(mode == null){throw new MissingArgumentException("Argument \"-mode\" is mandatory for AES operation "+operation);}
             if(padding == null){throw new MissingArgumentException("Argument \"-pad\" is mandatory for AES operation "+operation);}
             if(output == null){throw new MissingArgumentException("Argument \"-out\" is mandatory for AES operation "+operation);}
-            SymmetricCiphersController.runAes(operation, mode, padding, key, input, output);
+            SymmetricCiphersController.runAes(operation, mode, padding, key, input, output, iterations);
         }else {
             throw new UnsupportedOperationException("Operation \""+operation+"\" not defined for AES");
         }

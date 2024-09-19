@@ -6,6 +6,22 @@ package es.uclm.esi.gsya.securityalgorithms;
  * @author Eugenio
  */
 public interface OptionValues {
+    public static String CLI_ALGORITHM = "algorithm";
+    public static String CLI_ALG = "alg";
+    public static String CLI_OPERATION = "operation";
+    public static String CLI_OP = "op";
+    public static String CLI_MODE = "mode";
+    public static String CLI_PADDING = "padding";
+    public static String CLI_PAD = "pad";
+    public static String CLI_KEY = "key";
+    public static String CLI_HASH = "hash";
+    public static String CLI_INPUT = "input";
+    public static String CLI_IN = "in";
+    public static String CLI_OUTPUT = "output";
+    public static String CLI_OUT = "out";
+    public static String CLI_ITERATE = "iterate";
+    public static String CLI_IT = "it";
+    
     public static String OP_KEYGEN = "keygen";
     public static String OP_ENCRYPT = "encrypt";
     public static String OP_DECRYPT= "decrypt";

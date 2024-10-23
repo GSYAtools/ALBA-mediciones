@@ -48,8 +48,7 @@ public class SecurityAlgorithmsCLI {
             String iterate = cmd.getOptionValue("iterate");
 
             if(iterate != null)
-                if(iterate.matches("^\\d+$"))
-                    iterations = Integer.parseInt(iterate);
+                iterations = Integer.parseInt(iterate);
             
             if (ALG_AES.equalsIgnoreCase(algorithm)) {
                 try {
